@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "./Button";
-import { SaveState, cancelRegistration, saveGame } from "../redux/gameSlice";
+import { saveGame } from "../redux/gameSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { userAPI } from "../api";
@@ -9,18 +9,16 @@ export const Save = () => {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const username = useSelector((state: RootState) => state.game.username);
-  const gameState: SaveState = useSelector((state: RootState) => {
-    return {
-      position: state.game.position,
-      health: state.game.health,
-      moves: state.game.moves,
-      seed: state.game.seed,
-      endpoint: state.game.endpoint,
-    };
-  });
+  const game = useSelector((state: RootState) => state.game);
   const cloudSave = async () => {
     setIsLoading(true);
-    await userAPI.saveGame(gameState);
+    await userAPI.saveGame({
+      position: game.position,
+      health: game.health,
+      moves: game.moves,
+      seed: game.seed,
+      endpoint: game.endpoint,
+    });
     setIsLoading(false);
   };
   return (
