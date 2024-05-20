@@ -116,7 +116,9 @@ export const playerSlice = createSlice({
       else if (state.moves <= 0 || state.health <= 0) state.playerState = PlayerState.Lost;
     },
     newGame: (state) => {
-      state = { ...initialState };
+      const username = state.username;
+      const savedGameId = state.savedGameId;
+      state = { ...initialState, username, savedGameId };
       state.seed = generateSeed();
       state.gameMap = generateMap(state.seed, gameMapWidth);
       state.playerState = PlayerState.Playing;
