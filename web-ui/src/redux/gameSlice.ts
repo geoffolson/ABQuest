@@ -127,7 +127,7 @@ export const playerSlice = createSlice({
       state.playerState = PlayerState.Playing;
       return state;
     },
-    register: (state) => {
+    registerScreen: (state) => {
       state.menuScreen = MenuScreen.Regisration;
     },
     cancelRegistration: (state) => {
@@ -137,7 +137,7 @@ export const playerSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { move, newGame, saveGame, loadGame, register, cancelRegistration } =
+export const { move, newGame, saveGame, loadGame, registerScreen, cancelRegistration } =
   playerSlice.actions;
 
 export default playerSlice.reducer;

@@ -71,6 +71,56 @@ app.get("/profile", passport.authenticate("jwt", { session: false }), (req, res)
   res.json(req.user);
 });
 
+const savedState = z.object({
+  position: z.number().array().min(2).max(2),
+  endpoint: z.number().array().min(2).max(2),
+  health: z.number(),
+  moves: z.number(),
+  seed: z.number(),
+});
+app.post("/save", passport.authenticate("jwt", { session: false }), async (req, res) => {
+  const data = savedState.parse(req.body);
+  const savedGameId = z.number().optional().parse(req?.user?.savedGameId);
+  const userId = z.number().parse(req?.user?.id);
+  if (savedGameId) {
+    await prisma.savedGame.update({
+      data: {
+        positionX: data.position[0],
+        positionY: data.position[1],
+        endPositionX: data.endpoint[0],
+        endPositionY: data.endpoint[1],
+        health: data.health,
+        moves: data.moves,
+        seed: data.seed,
+      },
+      where: {
+        id: savedGameId,
+      },
+    });
+  } else {
+    const { id } = await prisma.savedGame.create({
+      data: {
+        positionX: data.position[0],
+        positionY: data.position[1],
+        endPositionX: data.endpoint[0],
+        endPositionY: data.endpoint[1],
+        health: data.health,
+        moves: data.moves,
+        seed: data.seed,
+      },
+    });
+    await prisma.user.update({
+      data: {
+        savedGameId: id,
+      },
+      where: {
+        id: userId,
+      },
+    });
+  }
+  res.json(req.user);
+});
+
 // Route to create a new user
 const UserRegistration = z.object({
   username: z.string(),
