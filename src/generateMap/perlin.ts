@@ -117,7 +117,6 @@ export const noise = {
     Y = Y & 255;
 
     // Calculate noise contributions from each of the four corners
-    console.log(x, y);
     let n00 = gradP[X + perm[Y]].dot2(x, y);
     let n01 = gradP[X + perm[Y + 1]].dot2(x, y - 1);
     let n10 = gradP[X + 1 + perm[Y]].dot2(x - 1, y);

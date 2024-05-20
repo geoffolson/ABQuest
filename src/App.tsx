@@ -1,15 +1,17 @@
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "./redux/store";
 import { Direction, move } from "./redux/gameSlice";
+import { Tile } from "./Tile";
+import { eq } from "./utils";
 
 function App() {
   const gameMap = useSelector((state: RootState) => state.game.gameMap);
   const position = useSelector((state: RootState) => state.game.position);
+  const playerState = useSelector((state: RootState) => state.game.playerState);
   const dispatch = useDispatch();
   return (
     <div
-      className="flex break-all"
-      style={{ width: "520px" }}
+      className="flex w-full items-center justify-center"
       tabIndex={0}
       onKeyDown={(e) => {
         switch (e.code) {
@@ -28,7 +30,19 @@ function App() {
         }
       }}
     >
-      {gameMap}
+      <div className="flex">
+        {gameMap.map((row, x) => (
+          <div key={x}>
+            {row.map((tile, y) => {
+              return (
+                <Tile key={`${x}-${y}`} tile={tile}>
+                  {eq([x, y], position) ? "@" : null}
+                </Tile>
+              );
+            })}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
