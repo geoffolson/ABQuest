@@ -62,15 +62,28 @@ app.post("/login", (req, res, next) => {
     if (!user) {
       return res.status(401).json({ message: info.message });
     }
-    const token = jwt.sign({ username: user.username }, jwtOptions.secretOrKey, {
-      expiresIn: "1h",
-    });
+    const token = jwt.sign({ username: user.username }, jwtOptions.secretOrKey);
     return res.json({ token });
   })(req, res, next);
 });
 
 app.get("/profile", passport.authenticate("jwt", { session: false }), (req, res) => {
-  res.json(req.user);
+  res.json({
+    username: req.user?.username,
+    savedGameId: req.user?.savedGameId,
+  });
+});
+
+app.get("/save", passport.authenticate("jwt", { session: false }), async (req, res) => {
+  const id = z.number().parse(req.user?.savedGameId);
+  const savedGame = await prisma.savedGame.findFirst({ where: { id } });
+  res.json({
+    position: [savedGame?.positionX, savedGame?.endPositionY],
+    endpoint: [savedGame?.endPositionX, savedGame?.endPositionY],
+    seed: savedGame?.seed,
+    moves: savedGame?.moves,
+    health: savedGame?.health,
+  });
 });
 
 const savedState = z.object({
@@ -82,9 +95,9 @@ const savedState = z.object({
 });
 app.post("/save", passport.authenticate("jwt", { session: false }), async (req, res) => {
   const data = savedState.parse(req.body);
-  const savedGameId = z.number().optional().parse(req?.user?.savedGameId);
   const userId = z.number().parse(req?.user?.id);
-  if (savedGameId) {
+  try {
+    const savedGameId = z.number().optional().parse(req?.user?.savedGameId);
     await prisma.savedGame.update({
       data: {
         positionX: data.position[0],
@@ -99,7 +112,7 @@ app.post("/save", passport.authenticate("jwt", { session: false }), async (req, 
         id: savedGameId,
       },
     });
-  } else {
+  } catch (e) {
     const { id } = await prisma.savedGame.create({
       data: {
         positionX: data.position[0],

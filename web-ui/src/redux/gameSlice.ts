@@ -22,6 +22,8 @@ export interface SaveState {
 }
 
 export interface GameState {
+  username: null | string;
+  savedGameId: number | null;
   position: vector;
   health: number;
   moves: number;
@@ -50,6 +52,8 @@ export const initialMoves = 450;
 const generateSeed = () => Math.floor(Math.random() * seedScale);
 const initialSeed = generateSeed();
 const initialState: GameState = {
+  username: null,
+  savedGameId: null,
   position: [0, 0],
   health: initialHealth,
   moves: initialMoves,
@@ -128,6 +132,10 @@ export const playerSlice = createSlice({
       state.playerState = PlayerState.Playing;
       return state;
     },
+    cloudSaveGame: (state) => {
+      state.playerState = PlayerState.Playing;
+      return state;
+    },
     registerScreen: (state) => {
       state.menuScreen = MenuScreen.Regisration;
     },
@@ -139,6 +147,16 @@ export const playerSlice = createSlice({
     },
     saveToken: (state, action: PayloadAction<string>) => {
       state.menuScreen = MenuScreen.Main;
+    },
+    saveUser: (state, action: PayloadAction<{ username: string; savedGameId: number | null }>) => {
+      state.username = action.payload.username;
+      state.savedGameId = action.payload.savedGameId;
+    },
+    logOut: (state) => {
+      state.menuScreen = MenuScreen.Main;
+      state.username = null;
+      state.savedGameId = null;
+      state.playerState = PlayerState.Pause;
     },
   },
 });
@@ -153,6 +171,8 @@ export const {
   cancelRegistration,
   saveToken,
   loginScreen,
+  logOut,
+  saveUser,
 } = playerSlice.actions;
 
 export default playerSlice.reducer;

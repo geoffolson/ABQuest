@@ -1,7 +1,7 @@
-import { hasSavedGame } from "../utils";
 import { Button } from "./Button";
-import { loadGame, newGame } from "../redux/gameSlice";
+import { newGame } from "../redux/gameSlice";
 import { useDispatch } from "react-redux";
+import { Load } from "./Load";
 
 const WinLost = (props: { message: string }) => {
   const dispatch = useDispatch();
@@ -9,9 +9,7 @@ const WinLost = (props: { message: string }) => {
     <div className="flex gap-4 flex-col">
       {props.message}
       <Button onClick={() => dispatch(newGame())}>New Game</Button>
-      <Button hidden={!hasSavedGame()} onClick={() => dispatch(loadGame())}>
-        Load Game
-      </Button>
+      <Load />
     </div>
   );
 };

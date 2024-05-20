@@ -1,8 +1,10 @@
 import { SaveState } from "./redux/gameSlice";
 
+const baseURL = "http://localhost:3000";
+
 const _fetch = (input: URL | RequestInfo, init?: RequestInit) => {
   const token = window.localStorage.getItem("token");
-  return fetch(input, {
+  return fetch(baseURL + input, {
     ...init,
     headers: {
       Authorization: `Bearer ${token}`,
@@ -20,16 +22,17 @@ const userPostJson = (input: URL | RequestInfo, data: any) => {
 };
 
 export const userAPI = {
-  loadGame: () => _fetch("/profile").then((res) => res.json()),
-  saveGame: (data: SaveState) => userPostJson("http://localhost:3000/save", data),
+  getProfile: () => _fetch("/profile").then((res) => res.json()),
+  getSavedGame: (): Promise<SaveState> => _fetch("/save").then((res) => res.json()),
+  saveGame: (data: SaveState) => userPostJson("/save", data),
   register: (data: { username: string; password: string }) =>
-    fetch("http://localhost:3000/register", {
+    fetch(`${baseURL}/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "application/json" },
       body: JSON.stringify(data),
     }).then((res) => res.json()),
   login: (data: { username: string; password: string }) =>
-    fetch("http://localhost:3000/login", {
+    fetch(`${baseURL}/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "application/json" },
       body: JSON.stringify(data),

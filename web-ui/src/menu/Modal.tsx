@@ -18,7 +18,7 @@ export const Modal = () => {
           <h3>Cenith Quest</h3>
         </div>
 
-        <div className="h-96 p-4 bg-gray-500">
+        <div className="h-100 p-4 bg-gray-500">
           {(() => {
             if (playerState === PlayerState.Won) return <Win />;
             if (playerState === PlayerState.Lost) return <Lost />;

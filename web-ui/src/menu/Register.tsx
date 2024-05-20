@@ -2,19 +2,22 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { Button } from "./Button";
 import { useDispatch } from "react-redux";
-import { cancelRegistration, saveToken } from "../redux/gameSlice";
+import { cancelRegistration, saveToken, saveUser } from "../redux/gameSlice";
 import { userAPI } from "../api";
 
 export const Register = (props: { login?: boolean }) => {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const { register, handleSubmit } = useForm<{ username: string; password: string }>();
+
   const onSubmit = async (data: { username: string; password: string }) => {
     setIsLoading(true);
     if (props.login) {
       const results = await userAPI.login(data);
       if (results.token) {
         dispatch(saveToken(results.token));
+        const user = await userAPI.getProfile();
+        dispatch(saveUser(user));
       }
     } else {
       await userAPI.register(data);
@@ -22,6 +25,7 @@ export const Register = (props: { login?: boolean }) => {
     }
     setIsLoading(false);
   };
+
   return (
     <div>
       <div className="text-lg pb-6">{props.login ? "Log In" : "Sign Up"}</div>
