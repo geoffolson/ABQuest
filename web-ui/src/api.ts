@@ -1,3 +1,5 @@
+import { SaveState } from "./redux/gameSlice";
+
 const _fetch = (input: URL | RequestInfo, init?: RequestInit) => {
   const token = window.localStorage.getItem("token");
   return fetch(input, {
@@ -19,7 +21,7 @@ const userPostJson = (input: URL | RequestInfo, data: any) => {
 
 export const userAPI = {
   loadGame: () => _fetch("/profile").then((res) => res.json()),
-  saveGame: (data) => userPostJson("http://localhost:3000/save", data),
+  saveGame: (data: SaveState) => userPostJson("http://localhost:3000/save", data),
   register: (data: { username: string; password: string }) =>
     fetch("http://localhost:3000/register", {
       method: "POST",
