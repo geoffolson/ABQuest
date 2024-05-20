@@ -10,6 +10,14 @@ export enum playerState {
   Playing,
 }
 
+export interface saveState {
+  position: vector;
+  health: number;
+  moves: number;
+  seed: number;
+  endpoint: vector;
+}
+
 export interface gameState {
   position: vector;
   health: number;
@@ -85,6 +93,10 @@ export const playerSlice = createSlice({
       state.seed = generateSeed();
       state.gameMap = generateMap(state.seed, gameMapWidth);
       return state;
+    },
+    loadGame: (state, action: PayloadAction<saveState>) => {
+      state = { ...state, ...action.payload };
+      state.gameMap = generateMap(state.seed, gameMapWidth);
     },
   },
 });
