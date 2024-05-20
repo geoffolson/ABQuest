@@ -2,12 +2,15 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { Tile, generateMap } from "../generateMap/generateMap";
 import { seedScale } from "../generateMap/perlin";
+import { eq } from "../utils";
 
 export type vector = [number, number]; // x, y
 export const gameMapWidth = 50;
 export enum PlayerState {
   Pause,
   Playing,
+  Lost,
+  Won,
 }
 
 export interface SaveState {
@@ -98,6 +101,8 @@ export const playerSlice = createSlice({
       const { health, moves } = tileEffectMap[state.gameMap[x][y]];
       state.moves += moves;
       state.health += health;
+      if (eq(state.position, state.endpoint)) state.playerState = PlayerState.Won;
+      else if (state.moves <= 0 || state.health <= 0) state.playerState = PlayerState.Lost;
     },
     newGame: (state) => {
       state = { ...initialState };

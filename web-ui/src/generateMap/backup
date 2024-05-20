@@ -1,0 +1,23 @@
+import { noise } from "./perlin";
+export type Tile = "B" | "S" | "L" | "M";
+
+const width = 50;
+
+export const generateMap = (seed: number): Tile[][] => {
+  noise.seed(seed);
+  const gameMap: Tile[][] = [];
+  for (let y = 0; y < width; ++y) {
+    const newRow: Tile[] = [];
+    for (let x = 0; x < width; ++x) {
+      const value = noise.perlin2(x / width, y / width);
+      console.log(value);
+      let tile: Tile = "L";
+      if (value < 0.2) tile = "M";
+      if (value < 0.5) tile = "B";
+      if (value < 0.8) tile = "S";
+      newRow.push(tile);
+    }
+    gameMap.push(newRow);
+  }
+  return gameMap;
+};
