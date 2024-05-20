@@ -6,7 +6,7 @@ import { eq } from "../utils";
 
 export type vector = [number, number]; // x, y
 export const gameMapWidth = 50;
-export enum PlayerState {
+export const enum PlayerState {
   Pause,
   Playing,
   Lost,
@@ -29,14 +29,19 @@ export interface GameState {
   endpoint: vector;
   seed: number;
   playerState: PlayerState;
+  menuScreen: MenuScreen;
 }
 
-export enum PlayerInput {
+export const enum PlayerInput {
   Up,
   Down,
   Left,
   Right,
   Pause,
+}
+export const enum MenuScreen {
+  Main,
+  Regisration,
 }
 
 export const initialHealth = 200;
@@ -51,6 +56,7 @@ const initialState: GameState = {
   seed: initialSeed,
   gameMap: generateMap(initialSeed, gameMapWidth),
   playerState: PlayerState.Pause,
+  menuScreen: MenuScreen.Main,
 };
 
 const tileEffectMap: Record<string, { health: number; moves: number }> = {
@@ -121,10 +127,17 @@ export const playerSlice = createSlice({
       state.playerState = PlayerState.Playing;
       return state;
     },
+    register: (state) => {
+      state.menuScreen = MenuScreen.Regisration;
+    },
+    cancelRegistration: (state) => {
+      state.menuScreen = MenuScreen.Main;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { move, newGame, saveGame, loadGame } = playerSlice.actions;
+export const { move, newGame, saveGame, loadGame, register, cancelRegistration } =
+  playerSlice.actions;
 
 export default playerSlice.reducer;

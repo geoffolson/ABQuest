@@ -1,11 +1,13 @@
-import { PlayerState } from "../redux/gameSlice";
+import { MenuScreen, PlayerState } from "../redux/gameSlice";
 import { RootState } from "../redux/store";
 import { useSelector } from "react-redux";
 import { MainMenu } from "./MainMenu";
 import { Win, Lost } from "./WinLoseMenu";
+import { Register } from "./Register";
 
 export const Modal = () => {
   const playerState = useSelector((state: RootState) => state.game.playerState);
+  const menuScreen = useSelector((state: RootState) => state.game.menuScreen);
   const hideModal = playerState === PlayerState.Playing ? "hidden" : "";
   return (
     <div
@@ -20,6 +22,7 @@ export const Modal = () => {
           {(() => {
             if (playerState === PlayerState.Won) return <Win />;
             if (playerState === PlayerState.Lost) return <Lost />;
+            if (menuScreen === MenuScreen.Regisration) return <Register />;
             return <MainMenu />;
           })()}
         </div>
