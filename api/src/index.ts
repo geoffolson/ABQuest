@@ -1,6 +1,7 @@
 import express from "express";
 import passport from "passport";
 import LocalStrategy from "passport-local";
+import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { PrismaClient } from "@prisma/client";
@@ -30,6 +31,27 @@ passport.use(
   })
 );
 
+// JWT Strategy
+const jwtOptions = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: "your_secret_key",
+};
+
+passport.use(
+  new JwtStrategy(jwtOptions, async (payload, done) => {
+    try {
+      const user = await prisma.user.findUnique({ where: { username: payload.username } });
+      if (user) {
+        return done(null, user);
+      } else {
+        return done(null, false);
+      }
+    } catch (error) {
+      return done(error, false);
+    }
+  })
+);
+
 app.post("/login", (req, res, next) => {
   passport.authenticate("local", { session: false }, (err: any, user: any, info: any) => {
     if (err) {
@@ -38,9 +60,15 @@ app.post("/login", (req, res, next) => {
     if (!user) {
       return res.status(401).json({ message: info.message });
     }
-    const token = jwt.sign({ username: user.username }, "your_secret_key");
+    const token = jwt.sign({ username: user.username }, jwtOptions.secretOrKey, {
+      expiresIn: "1h",
+    });
     return res.json({ token });
   })(req, res, next);
+});
+
+app.get("/profile", passport.authenticate("jwt", { session: false }), (req, res) => {
+  res.json(req.user);
 });
 
 // Route to create a new user
@@ -68,10 +96,6 @@ app.post("/register", async (req, res) => {
     console.error("Error creating user:", error);
     res.status(500).json({ message: "Internal server error" });
   }
-});
-
-app.get("/profile", passport.authenticate("local", { session: false }), (req, res) => {
-  res.json(req.user);
 });
 
 app.listen(3000, () => {
