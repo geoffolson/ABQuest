@@ -1,0 +1,79 @@
+import express from "express";
+import passport from "passport";
+import LocalStrategy from "passport-local";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import { PrismaClient } from "@prisma/client";
+import { z } from "zod";
+
+const prisma = new PrismaClient();
+const app = express();
+
+app.use(express.json());
+app.use(passport.initialize());
+
+passport.use(
+  new LocalStrategy.Strategy(async (username, password, done) => {
+    try {
+      const user = await prisma.user.findUnique({ where: { username } });
+      if (!user) {
+        return done(null, false, { message: "Incorrect username." });
+      }
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) {
+        return done(null, false, { message: "Incorrect password." });
+      }
+      return done(null, user);
+    } catch (error) {
+      return done(error);
+    }
+  })
+);
+
+app.post("/login", (req, res, next) => {
+  passport.authenticate("local", { session: false }, (err: any, user: any, info: any) => {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return res.status(401).json({ message: info.message });
+    }
+    const token = jwt.sign({ username: user.username }, "your_secret_key");
+    return res.json({ token });
+  })(req, res, next);
+});
+
+// Route to create a new user
+const UserRegistration = z.object({
+  username: z.string(),
+  password: z.string(),
+});
+app.post("/register", async (req, res) => {
+  try {
+    const { username, password } = UserRegistration.parse(req.body);
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create the user
+    const newUser = await prisma.user.create({
+      data: {
+        username,
+        password: hashedPassword,
+      },
+    });
+
+    res.status(201).json({ message: "User created successfully", user: newUser });
+  } catch (error) {
+    console.error("Error creating user:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+app.get("/profile", passport.authenticate("local", { session: false }), (req, res) => {
+  res.json(req.user);
+});
+
+app.listen(3000, () => {
+  console.log("Server is running on port 3000");
+});
