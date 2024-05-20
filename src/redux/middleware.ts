@@ -3,6 +3,7 @@ import { Middleware } from "@reduxjs/toolkit";
 
 export const saveGameKey = "savedGameState";
 export const saveMiddleware: Middleware = (store) => (next) => (_action) => {
+  // TODO: add validation
   const action = _action as { type: string; payload?: any };
   switch (action?.type) {
     case saveGame.type: {
@@ -20,8 +21,9 @@ export const saveMiddleware: Middleware = (store) => (next) => (_action) => {
     case loadGame.type: {
       // don't load from localStorage if saved data is provided in payload
       if (action?.payload) break;
+
+      // TODO: add validation
       const state = JSON.parse(window.localStorage.getItem(saveGameKey));
-      console.log(state);
       if (state) action.payload = state;
       break;
     }
