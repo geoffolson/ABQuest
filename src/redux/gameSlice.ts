@@ -27,14 +27,17 @@ export enum Direction {
   Right,
 }
 
-const seed = Math.floor(Math.random() * seedScale);
+export const initialHealth = 200;
+export const initialMoves = 450;
+const generateSeed = () => Math.floor(Math.random() * seedScale);
+const initialSeed = generateSeed();
 const initialState: gameState = {
   position: [0, 0],
-  health: 200,
-  moves: 450,
+  health: initialHealth,
+  moves: initialMoves,
   endpoint: [Math.floor(Math.random() * 50), Math.floor(Math.random() * 50)],
-  seed,
-  gameMap: generateMap(seed, gameMapWidth),
+  seed: initialSeed,
+  gameMap: generateMap(initialSeed, gameMapWidth),
   playerState: playerState.Playing,
 };
 
@@ -77,10 +80,16 @@ export const playerSlice = createSlice({
       state.moves += moves;
       state.health += health;
     },
+    newGame: (state) => {
+      state = { ...initialState };
+      state.seed = generateSeed();
+      state.gameMap = generateMap(state.seed, gameMapWidth);
+      return state;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { move } = playerSlice.actions;
+export const { move, newGame } = playerSlice.actions;
 
 export default playerSlice.reducer;

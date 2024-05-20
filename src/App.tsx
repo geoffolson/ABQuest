@@ -1,17 +1,13 @@
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "./redux/store";
+import { useDispatch } from "react-redux";
 import { Direction, move } from "./redux/gameSlice";
-import { Tile } from "./Tile";
-import { eq } from "./utils";
+import { Stats } from "./Stats";
+import { Map } from "./Map";
 
 function App() {
-  const gameMap = useSelector((state: RootState) => state.game.gameMap);
-  const position = useSelector((state: RootState) => state.game.position);
-  const playerState = useSelector((state: RootState) => state.game.playerState);
   const dispatch = useDispatch();
   return (
     <div
-      className="flex w-full items-center justify-center"
+      className="flex flex-col w-full h-full items-center justify-center"
       tabIndex={0}
       onKeyDown={(e) => {
         switch (e.code) {
@@ -30,19 +26,10 @@ function App() {
         }
       }}
     >
-      <div className="flex">
-        {gameMap.map((row, x) => (
-          <div key={x}>
-            {row.map((tile, y) => {
-              return (
-                <Tile key={`${x}-${y}`} tile={tile}>
-                  {eq([x, y], position) ? "@" : null}
-                </Tile>
-              );
-            })}
-          </div>
-        ))}
+      <div className="flex w-full content-between justify-between">
+        <Stats />
       </div>
+      <Map />
     </div>
   );
 }
