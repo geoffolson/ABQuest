@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { saveMiddleware } from "./middleware";
 import gameReducer from "./gameSlice";
 
 export const store = configureStore({
   reducer: {
     game: gameReducer,
   },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(saveMiddleware),
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

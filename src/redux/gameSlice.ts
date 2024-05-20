@@ -5,12 +5,12 @@ import { seedScale } from "../generateMap/perlin";
 
 export type vector = [number, number]; // x, y
 export const gameMapWidth = 50;
-export enum playerState {
+export enum PlayerState {
   Pause,
   Playing,
 }
 
-export interface saveState {
+export interface SaveState {
   position: vector;
   health: number;
   moves: number;
@@ -18,35 +18,36 @@ export interface saveState {
   endpoint: vector;
 }
 
-export interface gameState {
+export interface GameState {
   position: vector;
   health: number;
   moves: number;
   gameMap: Tile[][];
   endpoint: vector;
   seed: number;
-  playerState: playerState;
+  playerState: PlayerState;
 }
 
-export enum Direction {
+export enum PlayerInput {
   Up,
   Down,
   Left,
   Right,
+  Pause,
 }
 
 export const initialHealth = 200;
 export const initialMoves = 450;
 const generateSeed = () => Math.floor(Math.random() * seedScale);
 const initialSeed = generateSeed();
-const initialState: gameState = {
+const initialState: GameState = {
   position: [0, 0],
   health: initialHealth,
   moves: initialMoves,
   endpoint: [Math.floor(Math.random() * 50), Math.floor(Math.random() * 50)],
   seed: initialSeed,
   gameMap: generateMap(initialSeed, gameMapWidth),
-  playerState: playerState.Playing,
+  playerState: PlayerState.Pause,
 };
 
 const tileEffectMap: Record<string, { health: number; moves: number }> = {
@@ -60,26 +61,36 @@ export const playerSlice = createSlice({
   name: "player",
   initialState,
   reducers: {
-    move: (state, action: PayloadAction<Direction>) => {
+    move: (state, action: PayloadAction<PlayerInput>) => {
+      if (state.playerState === PlayerState.Pause) {
+        if (action.payload === PlayerInput.Pause) {
+          state.playerState = PlayerState.Playing;
+        }
+        return;
+      }
       switch (action.payload) {
-        case Direction.Down: {
+        case PlayerInput.Down: {
           if (state.position[1] === gameMapWidth - 1) return;
           ++state.position[1];
           break;
         }
-        case Direction.Up: {
+        case PlayerInput.Up: {
           if (state.position[1] === 0) return;
           --state.position[1];
           break;
         }
-        case Direction.Left: {
+        case PlayerInput.Left: {
           if (state.position[0] === 0) return;
           --state.position[0];
           break;
         }
-        case Direction.Right: {
+        case PlayerInput.Right: {
           if (state.position[0] === gameMapWidth - 1) return;
           ++state.position[0];
+          break;
+        }
+        case PlayerInput.Pause: {
+          state.playerState = PlayerState.Pause;
           break;
         }
       }
@@ -92,16 +103,23 @@ export const playerSlice = createSlice({
       state = { ...initialState };
       state.seed = generateSeed();
       state.gameMap = generateMap(state.seed, gameMapWidth);
+      state.playerState = PlayerState.Playing;
       return state;
     },
-    loadGame: (state, action: PayloadAction<saveState>) => {
+    loadGame: (state, action: PayloadAction<SaveState | undefined>) => {
       state = { ...state, ...action.payload };
       state.gameMap = generateMap(state.seed, gameMapWidth);
+      state.playerState = PlayerState.Playing;
+      return state;
+    },
+    saveGame: (state) => {
+      state.playerState = PlayerState.Playing;
+      return state;
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { move, newGame } = playerSlice.actions;
+export const { move, newGame, saveGame, loadGame } = playerSlice.actions;
 
 export default playerSlice.reducer;

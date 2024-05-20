@@ -1,7 +1,8 @@
 import { useDispatch } from "react-redux";
-import { Direction, move } from "./redux/gameSlice";
+import { PlayerInput, move } from "./redux/gameSlice";
 import { Stats } from "./Stats";
 import { Map } from "./Map";
+import { Modal } from "./menu/Modal";
 
 function App() {
   const dispatch = useDispatch();
@@ -12,16 +13,20 @@ function App() {
       onKeyDown={(e) => {
         switch (e.code) {
           case "ArrowUp":
-            dispatch(move(Direction.Up));
+            dispatch(move(PlayerInput.Up));
             break;
           case "ArrowDown":
-            dispatch(move(Direction.Down));
+            dispatch(move(PlayerInput.Down));
             break;
           case "ArrowLeft":
-            dispatch(move(Direction.Left));
+            dispatch(move(PlayerInput.Left));
             break;
           case "ArrowRight":
-            dispatch(move(Direction.Right));
+            dispatch(move(PlayerInput.Right));
+            break;
+          case "Escape":
+          case "Space":
+            dispatch(move(PlayerInput.Pause));
             break;
         }
       }}
@@ -30,6 +35,7 @@ function App() {
         <Stats />
       </div>
       <Map />
+      <Modal />
     </div>
   );
 }
