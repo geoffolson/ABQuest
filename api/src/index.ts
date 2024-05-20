@@ -6,12 +6,14 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { PrismaClient } from "@prisma/client";
 import { z } from "zod";
+import cors from "cors";
 
 const prisma = new PrismaClient();
 const app = express();
 
 app.use(express.json());
 app.use(passport.initialize());
+app.use(cors());
 
 passport.use(
   new LocalStrategy.Strategy(async (username, password, done) => {

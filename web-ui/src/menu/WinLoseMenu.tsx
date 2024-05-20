@@ -9,7 +9,7 @@ const WinLost = (props: { message: string }) => {
     <div className="flex gap-4 flex-col">
       {props.message}
       <Button onClick={() => dispatch(newGame())}>New Game</Button>
-      <Button disabled={!hasSavedGame()} onClick={() => dispatch(loadGame())}>
+      <Button hidden={!hasSavedGame()} onClick={() => dispatch(loadGame())}>
         Load Game
       </Button>
     </div>

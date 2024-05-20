@@ -1,30 +1,18 @@
 import { useForm } from "react-hook-form";
-import { useState } from "react";
 import { Button } from "./Button";
 import { useDispatch } from "react-redux";
-import { cancelRegistration, saveToken } from "../redux/gameSlice";
+import { cancelRegistration } from "../redux/gameSlice";
 import { userAPI } from "../api";
 
-export const Register = (props: { login?: boolean }) => {
-  const [isLoading, setIsLoading] = useState(false);
+export const Register = () => {
   const dispatch = useDispatch();
-  const { register, handleSubmit } = useForm<{ username: string; password: string }>();
-  const onSubmit = async (data: { username: string; password: string }) => {
-    setIsLoading(true);
-    if (props.login) {
-      const results = await userAPI.login(data);
-      if (results.token) {
-        dispatch(saveToken(results.token));
-      }
-    } else {
-      await userAPI.register(data);
-      dispatch(cancelRegistration());
-    }
-    setIsLoading(false);
+  const { register, handleSubmit } = useForm();
+  const onSubmit = async (data) => {
+    userAPI.register();
   };
   return (
     <div>
-      <div className="text-lg pb-6">{props.login ? "Log In" : "Sign Up"}</div>
+      <div className="text-lg pb-6">Registration</div>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <label className="flex w-full flex-col">
           Username:
@@ -46,9 +34,7 @@ export const Register = (props: { login?: boolean }) => {
           <Button variant="secondary" onClick={() => dispatch(cancelRegistration())}>
             Back
           </Button>
-          <Button disabled={isLoading} type="submit">
-            Submit
-          </Button>
+          <Button type="submit">Submit</Button>
         </div>
       </form>
     </div>

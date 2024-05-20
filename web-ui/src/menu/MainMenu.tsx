@@ -1,13 +1,13 @@
 import { hasSavedGame } from "../utils";
 import { Button } from "./Button";
-import { loadGame, newGame, saveGame, registerScreen } from "../redux/gameSlice";
+import { loadGame, newGame, saveGame, registerScreen, loginScreen } from "../redux/gameSlice";
 import { useDispatch } from "react-redux";
 
 export const MainMenu = () => {
   const dispatch = useDispatch();
   return (
     <div className="flex gap-4 flex-col">
-      <Button onClick={() => dispatch(registerScreen())}>Log In</Button>
+      <Button onClick={() => dispatch(loginScreen())}>Log In</Button>
       <Button onClick={() => dispatch(newGame())}>New Game</Button>
       <Button hidden={!hasSavedGame()} onClick={() => dispatch(loadGame())}>
         Load Game

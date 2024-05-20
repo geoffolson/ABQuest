@@ -42,6 +42,7 @@ export const enum PlayerInput {
 export const enum MenuScreen {
   Main,
   Regisration,
+  Login,
 }
 
 export const initialHealth = 200;
@@ -130,14 +131,28 @@ export const playerSlice = createSlice({
     registerScreen: (state) => {
       state.menuScreen = MenuScreen.Regisration;
     },
+    loginScreen: (state) => {
+      state.menuScreen = MenuScreen.Login;
+    },
     cancelRegistration: (state) => {
+      state.menuScreen = MenuScreen.Main;
+    },
+    saveToken: (state, action: PayloadAction<string>) => {
       state.menuScreen = MenuScreen.Main;
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { move, newGame, saveGame, loadGame, registerScreen, cancelRegistration } =
-  playerSlice.actions;
+export const {
+  move,
+  newGame,
+  saveGame,
+  loadGame,
+  registerScreen,
+  cancelRegistration,
+  saveToken,
+  loginScreen,
+} = playerSlice.actions;
 
 export default playerSlice.reducer;

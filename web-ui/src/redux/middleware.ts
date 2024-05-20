@@ -1,4 +1,4 @@
-import { saveGame, loadGame, SaveState } from "./gameSlice";
+import { saveGame, loadGame, SaveState, saveToken } from "./gameSlice";
 import { Middleware } from "@reduxjs/toolkit";
 
 export const saveGameKey = "savedGameState";
@@ -26,6 +26,9 @@ export const saveMiddleware: Middleware = (store) => (next) => (_action) => {
       const state = JSON.parse(window.localStorage.getItem(saveGameKey));
       if (state) action.payload = state;
       break;
+    }
+    case saveToken.type: {
+      window.localStorage.setItem("token", action.payload);
     }
   }
   next(action);

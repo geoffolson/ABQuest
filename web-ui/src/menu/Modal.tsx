@@ -23,6 +23,7 @@ export const Modal = () => {
             if (playerState === PlayerState.Won) return <Win />;
             if (playerState === PlayerState.Lost) return <Lost />;
             if (menuScreen === MenuScreen.Regisration) return <Register />;
+            if (menuScreen === MenuScreen.Login) return <Register login />;
             return <MainMenu />;
           })()}
         </div>
