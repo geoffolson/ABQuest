@@ -8,7 +8,7 @@ function App() {
   const dispatch = useDispatch();
   return (
     <div
-      className="flex flex-col w-full h-full items-center justify-center"
+      className="flex flex-col w-full h-screen"
       tabIndex={0}
       onKeyDown={(e) => {
         switch (e.code) {

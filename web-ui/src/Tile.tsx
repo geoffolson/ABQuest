@@ -4,8 +4,17 @@ import lavaURL from "./assets/lava.png";
 import sandURL from "./assets/sand.png";
 import { Tile as TileType } from "./generateMap/generateMap";
 import { useMemo } from "react";
+import classNames from "classnames";
 
-export const Tile = ({ tile, children }: { tile: TileType; children?: any }) => {
+export const Tile = ({
+  tile,
+  isPlayer,
+  isEndpoint,
+}: {
+  tile: TileType;
+  isPlayer?: boolean;
+  isEndpoint?: boolean;
+}) => {
   const imgURL = useMemo(() => {
     return {
       B: sandURL,
@@ -16,10 +25,16 @@ export const Tile = ({ tile, children }: { tile: TileType; children?: any }) => 
   }, [tile]);
   return (
     <div
-      className="bg-no-repeat w-6 h-6 bg-cover img-pixelated"
+      className="bg-no-repeat w-full bg-cover img-pixelated"
       style={{ backgroundImage: `url("${imgURL}")` }}
     >
-      {children}
+      <div
+        className={classNames(
+          "pb-[100%]",
+          { "bg-blue-700": isPlayer },
+          { "bg-green-700": isEndpoint && !isPlayer }
+        )}
+      />
     </div>
   );
 };
