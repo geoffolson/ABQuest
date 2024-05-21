@@ -17,5 +17,5 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./api/dev.db/:/usr/src/app/dev.db
+      - ./api/dev.db:/usr/src/app/dev.db
 
