@@ -84,23 +84,23 @@ export const playerSlice = createSlice({
       }
       switch (action.payload) {
         case PlayerInput.Down: {
-          if (state.position[1] === gameMapWidth - 1) return;
-          ++state.position[1];
+          if (state.position[0] === gameMapWidth - 1) return;
+          ++state.position[0];
           break;
         }
         case PlayerInput.Up: {
-          if (state.position[1] === 0) return;
-          --state.position[1];
-          break;
-        }
-        case PlayerInput.Left: {
           if (state.position[0] === 0) return;
           --state.position[0];
           break;
         }
+        case PlayerInput.Left: {
+          if (state.position[1] === 0) return;
+          --state.position[1];
+          break;
+        }
         case PlayerInput.Right: {
-          if (state.position[0] === gameMapWidth - 1) return;
-          ++state.position[0];
+          if (state.position[1] === gameMapWidth - 1) return;
+          ++state.position[1];
           break;
         }
         case PlayerInput.Pause: {
