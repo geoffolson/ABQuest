@@ -24,7 +24,7 @@ export const Load = () => {
       <Button disabled={!hasLocalSavedGame()} onClick={() => dispatch(loadGame())}>
         Load Local Game
       </Button>
-      <Button disabled={savedGameId === null} onClick={loadCloudGame}>
+      <Button isLoading={loading} disabled={savedGameId === null} onClick={loadCloudGame}>
         Load Cloud Game
       </Button>
     </div>

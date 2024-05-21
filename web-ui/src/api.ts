@@ -1,6 +1,6 @@
 import { SaveState } from "./redux/gameSlice";
 
-const baseURL = "http://localhost:3000";
+const baseURL = "/api";
 
 const _fetch = (input: URL | RequestInfo, init?: RequestInit) => {
   const token = window.localStorage.getItem("token");

@@ -23,6 +23,7 @@ export const saveMiddleware: Middleware = (store) => (next) => (_action) => {
       if (action?.payload) break;
 
       // TODO: add validation
+      // @ts-ignore
       const state = JSON.parse(window.localStorage.getItem(saveGameKey));
       if (state) action.payload = state;
       break;

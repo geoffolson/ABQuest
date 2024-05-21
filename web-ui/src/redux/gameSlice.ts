@@ -147,7 +147,7 @@ export const playerSlice = createSlice({
     cancelRegistration: (state) => {
       state.menuScreen = MenuScreen.Main;
     },
-    saveToken: (state, action: PayloadAction<string>) => {
+    saveToken: (state, _action: PayloadAction<string>) => {
       state.menuScreen = MenuScreen.Main;
     },
     saveUser: (state, action: PayloadAction<{ username: string; savedGameId: number | null }>) => {
