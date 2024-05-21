@@ -1,6 +1,6 @@
 # AB Quest
 
-Simple Rogue lite game with cloud saving
+Simple Rogue lite game with cloud saving. Try the live [demo](http://ec2-34-216-78-119.us-west-2.compute.amazonaws.com/)
 
 # Install
 
