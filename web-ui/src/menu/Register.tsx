@@ -48,7 +48,7 @@ export const Register = (props: { login?: boolean }) => {
         <label className="flex w-full flex-col">
           Username:
           <input
-            className="text-black p-1"
+            className="text-black p-2 mt-1 rounded-md"
             {...register("username", { required: true })}
             type="string"
           />
@@ -56,7 +56,7 @@ export const Register = (props: { login?: boolean }) => {
         <label className="flex w-full flex-col">
           Password:
           <input
-            className="text-black p-1"
+            className="text-black p-2 mt-1 rounded-md"
             {...register("password", { required: true })}
             type="password"
           />
