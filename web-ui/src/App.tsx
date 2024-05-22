@@ -35,7 +35,7 @@ function App() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [dispatch]);
   return (
-    <div className="h-screen bg-sky-900" tabIndex={0}>
+    <div className="h-screen bg-sky-900">
       <World />
       <div className="flex flex-col w-full bg-gray-950">
         <div className="flex w-full content-between justify-between bg-blue-500"></div>
