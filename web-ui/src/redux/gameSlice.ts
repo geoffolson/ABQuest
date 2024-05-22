@@ -105,7 +105,7 @@ export const playerSlice = createSlice({
         }
         case PlayerInput.Pause: {
           state.playerState = PlayerState.Pause;
-          break;
+          return;
         }
       }
       const [x, y] = state.position;
