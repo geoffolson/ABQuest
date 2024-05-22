@@ -9,7 +9,7 @@ export const Map = () => {
   const position = useSelector((state: RootState) => state.game.position);
   const endPosition = useSelector((state: RootState) => state.game.endpoint);
   return (
-    <div className="flex w-72 h-72 justify-center border-2 border-black opacity-75">
+    <div className="flex w-72 h-72 justify-center border-2 border-black opacity-90">
       <div className="flex flex-col w-screen">
         {gameMap.map((row, y) => (
           <div className="flex flex-row w-full" key={y}>
