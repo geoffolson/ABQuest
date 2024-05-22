@@ -78,17 +78,27 @@ app.get("/save", passport.authenticate("jwt", { session: false }), async (req, r
   const id = z.number().parse(req.user?.savedGameId);
   const savedGame = await prisma.savedGame.findFirst({ where: { id } });
   res.json({
-    position: [savedGame?.positionX, savedGame?.endPositionY],
-    endpoint: [savedGame?.endPositionX, savedGame?.endPositionY],
+    position: {
+      x: savedGame?.positionX,
+      y: savedGame?.positionY,
+    },
+    endpoint: {
+      x: savedGame?.endPositionX,
+      y: savedGame?.endPositionY,
+    },
     seed: savedGame?.seed,
     moves: savedGame?.moves,
     health: savedGame?.health,
   });
 });
 
+const vector = z.object({
+  x: z.number(),
+  y: z.number(),
+});
 const savedState = z.object({
-  position: z.number().array().min(2).max(2),
-  endpoint: z.number().array().min(2).max(2),
+  position: vector,
+  endpoint: vector,
   health: z.number(),
   moves: z.number(),
   seed: z.number(),
@@ -100,10 +110,10 @@ app.post("/save", passport.authenticate("jwt", { session: false }), async (req, 
     const savedGameId = z.number().optional().parse(req?.user?.savedGameId);
     await prisma.savedGame.update({
       data: {
-        positionX: data.position[0],
-        positionY: data.position[1],
-        endPositionX: data.endpoint[0],
-        endPositionY: data.endpoint[1],
+        positionX: data.position.x,
+        positionY: data.position.y,
+        endPositionX: data.endpoint.x,
+        endPositionY: data.endpoint.y,
         health: data.health,
         moves: data.moves,
         seed: data.seed,
@@ -115,10 +125,10 @@ app.post("/save", passport.authenticate("jwt", { session: false }), async (req, 
   } catch (e) {
     const { id } = await prisma.savedGame.create({
       data: {
-        positionX: data.position[0],
-        positionY: data.position[1],
-        endPositionX: data.endpoint[0],
-        endPositionY: data.endpoint[1],
+        positionX: data.position.x,
+        positionY: data.position.y,
+        endPositionX: data.endpoint.x,
+        endPositionY: data.endpoint.y,
         health: data.health,
         moves: data.moves,
         seed: data.seed,
