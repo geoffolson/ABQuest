@@ -62,12 +62,10 @@ export const Register = (props: { login?: boolean }) => {
           />
         </label>
         <div className="flex gap-4">
-          <Button variant="secondary" onClick={() => dispatch(cancelRegistration())}>
+          <Button variant="secondary" type="button" onClick={() => dispatch(cancelRegistration())}>
             Back
           </Button>
-          <Button disabled={isLoading} type="submit">
-            Submit
-          </Button>
+          <Button disabled={isLoading}>Submit</Button>
         </div>
       </form>
     </div>
