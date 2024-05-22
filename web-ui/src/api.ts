@@ -34,18 +34,14 @@ const userPostJson = <T>(input: URL | RequestInfo, data: T) => {
 
 export const userAPI = {
   getProfile: () => _fetch("/profile").then((res) => res.json()),
+
   getSavedGame: (): Promise<SaveState> => _fetch("/save").then((res) => res.json()),
+
   saveGame: (data: SaveState) => userPostJson("/save", data),
+
   register: (data: { username: string; password: string }) =>
-    _fetch("/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify(data),
-    }).then((res) => res.json()),
+    userPostJson("/register", data).then((res) => res.json()),
+
   login: (data: { username: string; password: string }) =>
-    _fetch("/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify(data),
-    }).then((res) => res.json()),
+    userPostJson("/login", data).then((res) => res.json()),
 };
