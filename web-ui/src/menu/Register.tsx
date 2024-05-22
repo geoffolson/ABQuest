@@ -33,6 +33,7 @@ export const Register = (props: { login?: boolean }) => {
       userAPI
         .register(data)
         .then(() => dispatch(cancelRegistration()))
+        .catch((e: APIError) => setError(e.message))
         .finally(() => setIsLoading(false));
     }
   };

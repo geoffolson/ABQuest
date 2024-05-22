@@ -15,7 +15,7 @@ const _fetch = (input: URL | RequestInfo, init?: RequestInit) => {
       ...init?.headers,
     },
   }).then((res) => {
-    if (res.status === 401) {
+    if ([400, 401, 500].includes(res.status)) {
       return res.json().then((e: APIError) => {
         throw e;
       });
@@ -37,7 +37,7 @@ export const userAPI = {
   getSavedGame: (): Promise<SaveState> => _fetch("/save").then((res) => res.json()),
   saveGame: (data: SaveState) => userPostJson("/save", data),
   register: (data: { username: string; password: string }) =>
-    fetch(`${baseURL}/register`, {
+    _fetch("/register", {
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "application/json" },
       body: JSON.stringify(data),

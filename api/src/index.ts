@@ -158,6 +158,13 @@ app.post("/register", async (req, res) => {
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    const existingUser = await prisma.user.findFirst({ where: { username } });
+    if (existingUser) {
+      console.error("Error creating user:", "Username already exists");
+      res.status(400).json({ message: "Username already exists" });
+      return;
+    }
+
     // Create the user
     const newUser = await prisma.user.create({
       data: {
