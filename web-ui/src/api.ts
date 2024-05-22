@@ -2,14 +2,25 @@ import { SaveState } from "./redux/gameSlice";
 
 const baseURL = "/api";
 
+export type APIError = {
+  message: string;
+};
+
 const _fetch = (input: URL | RequestInfo, init?: RequestInit) => {
-  const token = window.localStorage.getItem("token");
+  const token = window.localStorage.getItem("token") ?? "";
   return fetch(baseURL + input, {
     ...init,
     headers: {
       Authorization: `Bearer ${token}`,
       ...init?.headers,
     },
+  }).then((res) => {
+    if (res.status === 401) {
+      return res.json().then((e: APIError) => {
+        throw e;
+      });
+    }
+    return res;
   });
 };
 
@@ -32,7 +43,7 @@ export const userAPI = {
       body: JSON.stringify(data),
     }).then((res) => res.json()),
   login: (data: { username: string; password: string }) =>
-    fetch(`${baseURL}/login`, {
+    _fetch("/login", {
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "application/json" },
       body: JSON.stringify(data),
