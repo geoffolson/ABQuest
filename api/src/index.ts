@@ -140,6 +140,7 @@ app.post("/save", passport.authenticate("jwt", { session: false }), async (req, 
         id: userId,
       },
     });
+    if (req.user) req.user.savedGameId = id;
   }
   res.json(req.user);
 });
