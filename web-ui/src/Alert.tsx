@@ -1,4 +1,6 @@
-export const Alert = (props: { children: any; hidden?: boolean }) => {
+import React from "react";
+
+export const Alert = (props: { children: React.ReactNode; hidden?: boolean }) => {
   return (
     <div
       role="alert"

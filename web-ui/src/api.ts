@@ -24,7 +24,7 @@ const _fetch = (input: URL | RequestInfo, init?: RequestInit) => {
   });
 };
 
-const userPostJson = (input: URL | RequestInfo, data: any) => {
+const userPostJson = <T>(input: URL | RequestInfo, data: T) => {
   return _fetch(input, {
     method: "POST",
     headers: { "Content-Type": "application/json", Accept: "application/json" },
