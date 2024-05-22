@@ -58,7 +58,7 @@ const initialSeed = generateSeed();
 const initialState: GameState = {
   username: null,
   savedGameId: null,
-  position: { x: 0, y: 0 },
+  position: { x: 24, y: 24 },
   health: initialHealth,
   moves: initialMoves,
   endpoint: { x: Math.floor(Math.random() * 50), y: Math.floor(Math.random() * 50) },
