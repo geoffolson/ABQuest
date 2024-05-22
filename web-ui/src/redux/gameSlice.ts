@@ -76,7 +76,11 @@ export const playerSlice = createSlice({
   initialState,
   reducers: {
     move: (state, action: PayloadAction<PlayerInput>) => {
-      if (state.playerState === PlayerState.Pause) {
+      if (
+        state.playerState === PlayerState.Pause ||
+        state.playerState === PlayerState.Lost ||
+        state.playerState === PlayerState.Won
+      ) {
         if (action.payload === PlayerInput.Pause) {
           state.playerState = PlayerState.Playing;
         }
