@@ -1,10 +1,11 @@
 import { useDispatch } from "react-redux";
-import { PlayerInput, move } from "./redux/gameSlice";
+import { PlayerInput, move, saveUser } from "./redux/gameSlice";
 import { Stats } from "./Stats";
 import { Map } from "./Map";
 import { Modal } from "./menu/Modal";
 import { World } from "./World";
 import { useEffect } from "react";
+import { userAPI } from "./api";
 
 function App() {
   const dispatch = useDispatch();
@@ -30,6 +31,7 @@ function App() {
   };
   useEffect(() => {
     window.addEventListener("keydown", onKeyDown);
+    userAPI.getProfile().then((user) => dispatch(saveUser(user)));
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [dispatch]);
   return (
