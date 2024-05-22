@@ -71,7 +71,6 @@ const _World = () => {
 };
 
 export const World = () => {
-  const position = useSelector((state: RootState) => state.game.position);
   return (
     <Canvas
       camera={{
