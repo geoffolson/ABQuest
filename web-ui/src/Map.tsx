@@ -14,7 +14,7 @@ export const Map = () => {
         {gameMap.map((row, y) => (
           <div className="flex flex-row w-full" key={y}>
             {row.map((tile, x) => {
-              const currentTile: vector = [y, x];
+              const currentTile: vector = { y, x };
               if (eq(currentTile, position)) return <Tile key={`${x}-${y}`} tile={tile} isPlayer />;
               else if (eq(currentTile, endPosition))
                 return <Tile key={`${x}-${y}`} tile={tile} isEndpoint />;

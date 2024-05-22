@@ -4,7 +4,11 @@ import { Tile, generateMap } from "../generateMap/generateMap";
 import { seedScale } from "../generateMap/perlin";
 import { eq } from "../utils";
 
-export type vector = [number, number]; // y,x
+export type vector = {
+  x: number;
+  y: number;
+};
+
 export const gameMapWidth = 50;
 export const enum PlayerState {
   Pause,
@@ -54,10 +58,10 @@ const initialSeed = generateSeed();
 const initialState: GameState = {
   username: null,
   savedGameId: null,
-  position: [0, 0],
+  position: { x: 0, y: 0 },
   health: initialHealth,
   moves: initialMoves,
-  endpoint: [Math.floor(Math.random() * 50), Math.floor(Math.random() * 50)],
+  endpoint: { x: Math.floor(Math.random() * 50), y: Math.floor(Math.random() * 50) },
   seed: initialSeed,
   gameMap: generateMap(initialSeed, gameMapWidth),
   playerState: PlayerState.Pause,
@@ -88,23 +92,23 @@ export const playerSlice = createSlice({
       }
       switch (action.payload) {
         case PlayerInput.Down: {
-          if (state.position[0] === gameMapWidth - 1) return;
-          ++state.position[0];
+          if (state.position.y === gameMapWidth - 1) return;
+          ++state.position.y;
           break;
         }
         case PlayerInput.Up: {
-          if (state.position[0] === 0) return;
-          --state.position[0];
+          if (state.position.y === 0) return;
+          --state.position.y;
           break;
         }
         case PlayerInput.Left: {
-          if (state.position[1] === 0) return;
-          --state.position[1];
+          if (state.position.x === 0) return;
+          --state.position.x;
           break;
         }
         case PlayerInput.Right: {
-          if (state.position[1] === gameMapWidth - 1) return;
-          ++state.position[1];
+          if (state.position.x === gameMapWidth - 1) return;
+          ++state.position.x;
           break;
         }
         case PlayerInput.Pause: {
@@ -112,8 +116,8 @@ export const playerSlice = createSlice({
           return;
         }
       }
-      const [x, y] = state.position;
-      const { health, moves } = tileEffectMap[state.gameMap[x][y]];
+      const { x, y } = state.position;
+      const { health, moves } = tileEffectMap[state.gameMap[y][x]];
       state.moves += moves;
       state.health += health;
       if (eq(state.position, state.endpoint)) state.playerState = PlayerState.Won;
