@@ -4,7 +4,7 @@ import { Tile, generateMap } from "../generateMap/generateMap";
 import { seedScale } from "../generateMap/perlin";
 import { eq } from "../utils";
 
-export type vector = [number, number]; // x, y
+export type vector = [number, number]; // y,x
 export const gameMapWidth = 50;
 export const enum PlayerState {
   Pause,

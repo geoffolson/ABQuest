@@ -3,12 +3,13 @@ import { PlayerInput, move } from "./redux/gameSlice";
 import { Stats } from "./Stats";
 import { Map } from "./Map";
 import { Modal } from "./menu/Modal";
+import { World } from "./World";
 
 function App() {
   const dispatch = useDispatch();
   return (
     <div
-      className="flex flex-col w-full h-screen"
+      className="h-screen bg-sky-900"
       tabIndex={0}
       onKeyDown={(e) => {
         switch (e.code) {
@@ -31,11 +32,15 @@ function App() {
         }
       }}
     >
-      <div className="flex w-full content-between justify-between">
-        <Stats />
+      <World />
+      <div className="flex flex-col w-full bg-gray-950">
+        <div className="flex w-full content-between justify-between bg-blue-500"></div>
+        <Modal />
+        <div className="fixed z-10 inset-0 bg-gray-900 bg-transparent overflow-y-auto h-full w-full px-4">
+          <Stats />
+          <Map />
+        </div>
       </div>
-      <Map />
-      <Modal />
     </div>
   );
 }
