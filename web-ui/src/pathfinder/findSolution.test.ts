@@ -1,4 +1,3 @@
-// sum.test.js
 import { expect, test } from "vitest";
 import { findSolution } from "./findSolution";
 import { Tile } from "../generateMap/generateMap";
