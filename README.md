@@ -55,3 +55,5 @@ npm run test
 ```
 
 Function findSolution will perform a depth first search for a possible solution. When one is found the function returns true, otherwise it will return false. More work will be done. Future version will search for and return the optimal path and be integrated into the frontend application.
+
+The current implementation is located in `/web-ui/src/pathfinder/findSolution.ts`

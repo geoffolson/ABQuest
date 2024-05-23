@@ -5,7 +5,7 @@ import { eq } from "../utils";
 type Heuristic = { health: number; moves: number };
 
 class VisitedTiles {
-  private visitedTilesMap;
+  private readonly visitedTilesMap;
   constructor() {
     this.visitedTilesMap = new Map<string, Heuristic[]>();
   }
@@ -34,7 +34,7 @@ class GameMap {
     this.map = map;
     this.width = this.map.length;
   }
-  move(character: CharacterState, direction: PlayerInput) {
+  move(character: CharacterState, direction: PlayerInput): CharacterState | null {
     // performing deep copy of character object
     // using this method of deep cloning in case reviewer is using a version of node older than 17.0.0
     // Otherwise would use structuredClone
@@ -71,14 +71,14 @@ class GameMap {
 
 class FindSolution {
   private readonly gameMap;
-  private visitedTiles;
+  private readonly visitedTiles;
 
   constructor(gameMap: Tile[][]) {
     this.gameMap = new GameMap(gameMap);
     this.visitedTiles = new VisitedTiles();
   }
 
-  private continueTraversal(character: CharacterState) {
+  private continueTraversal(character: CharacterState): boolean {
     const visits = this.visitedTiles.getVisited(character.position);
     if (!visits) {
       this.visitedTiles.setVisited(character);
@@ -92,7 +92,7 @@ class FindSolution {
     return true;
   }
 
-  isSolvable(character: CharacterState) {
+  isSolvable(character: CharacterState): boolean {
     // base case
     if (character.health < 0 || character.moves < 0) return false;
     // success
