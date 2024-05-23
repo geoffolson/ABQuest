@@ -1,7 +1,7 @@
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";
 import { useSelector } from "react-redux";
 import { RootState } from "./redux/store";
-import { vector } from "./redux/gameSlice";
+import { Vector2 } from "./redux/gameSlice";
 import { Tile as TileType } from "./generateMap/generateMap";
 import { useRef } from "react";
 import { Mesh, Euler, TextureLoader } from "three";
@@ -10,7 +10,7 @@ import lavaImgURL from "./assets/lava.png";
 import mudImgURL from "./assets/mud.png";
 import asphaltImgURL from "./assets/asphalt.png";
 
-const GameTile = ({ position, tile }: { position: vector; tile: TileType }) => {
+const GameTile = ({ position, tile }: { position: Vector2; tile: TileType }) => {
   const lava = useLoader(TextureLoader, lavaImgURL);
   const sand = useLoader(TextureLoader, sandImgURL);
   const mud = useLoader(TextureLoader, mudImgURL);
@@ -29,7 +29,7 @@ const GameTile = ({ position, tile }: { position: vector; tile: TileType }) => {
   );
 };
 
-const Character = ({ position, color }: { position: vector; color: string }) => {
+const Character = ({ position, color }: { position: Vector2; color: string }) => {
   const ref = useRef<Mesh>(null);
   useFrame((_state, delta) => {
     if (ref.current) ref.current.rotation.z += delta;

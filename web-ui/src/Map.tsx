@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import { Tile } from "./Tile";
 import { eq } from "./utils";
-import { vector } from "./redux/gameSlice";
+import { Vector2 } from "./redux/gameSlice";
 
 export const Map = () => {
   const gameMap = useSelector((state: RootState) => state.game.gameMap);
@@ -14,7 +14,7 @@ export const Map = () => {
         {gameMap.map((row, y) => (
           <div className="flex flex-row w-full" key={y}>
             {row.map((tile, x) => {
-              const currentTile: vector = { y, x };
+              const currentTile: Vector2 = { y, x };
               if (eq(currentTile, position)) return <Tile key={`${x}-${y}`} tile={tile} isPlayer />;
               else if (eq(currentTile, endPosition))
                 return <Tile key={`${x}-${y}`} tile={tile} isEndpoint />;

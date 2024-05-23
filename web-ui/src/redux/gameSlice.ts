@@ -4,7 +4,7 @@ import { Tile, generateMap } from "../generateMap/generateMap";
 import { seedScale } from "../generateMap/perlin";
 import { eq } from "../utils";
 
-export type vector = {
+export type Vector2 = {
   x: number;
   y: number;
 };
@@ -18,8 +18,8 @@ export const enum PlayerState {
 }
 
 export type CharacterState = {
-  position: vector;
-  endpoint: vector;
+  position: Vector2;
+  endpoint: Vector2;
   moves: number;
   health: number;
 };

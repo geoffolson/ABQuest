@@ -1,5 +1,5 @@
 import { Tile } from "../generateMap/generateMap";
-import { CharacterState, PlayerInput, vector, tileEffectMap } from "../redux/gameSlice";
+import { CharacterState, PlayerInput, Vector2, tileEffectMap } from "../redux/gameSlice";
 import { eq } from "../utils";
 
 type Heuristic = { health: number; moves: number };
@@ -10,7 +10,7 @@ class VisitedTiles {
     this.visitedTilesMap = new Map<string, Heuristic[]>();
   }
 
-  getVisited(position: vector) {
+  getVisited(position: Vector2) {
     return this.visitedTilesMap.get(`${position.x}-${position.y}`);
   }
 
@@ -28,14 +28,16 @@ class VisitedTiles {
 }
 
 class GameMap {
-  private map;
-  private width;
+  private readonly map;
+  private readonly width;
   constructor(map: Tile[][]) {
     this.map = map;
     this.width = this.map.length;
   }
   move(character: CharacterState, direction: PlayerInput) {
     // performing deep copy of character object
+    // using this method of deep cloning in case reviewer is using a version of node older than 17.0.0
+    // Otherwise would use structuredClone
     const _character: CharacterState = JSON.parse(JSON.stringify(character));
     switch (direction) {
       case PlayerInput.Down: {
@@ -68,7 +70,7 @@ class GameMap {
 }
 
 class FindSolution {
-  private gameMap;
+  private readonly gameMap;
   private visitedTiles;
 
   constructor(gameMap: Tile[][]) {
