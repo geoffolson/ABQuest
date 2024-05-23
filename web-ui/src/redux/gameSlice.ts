@@ -17,23 +17,21 @@ export const enum PlayerState {
   Won,
 }
 
-export interface SaveState {
+export type CharacterState = {
   position: vector;
-  health: number;
-  moves: number;
-  seed: number;
   endpoint: vector;
+  moves: number;
+  health: number;
+};
+
+export interface SaveState extends CharacterState {
+  seed: number;
 }
 
-export interface GameState {
+export interface GameState extends SaveState {
   username: null | string;
   savedGameId: number | null;
-  position: vector;
-  health: number;
-  moves: number;
   gameMap: Tile[][];
-  endpoint: vector;
-  seed: number;
   playerState: PlayerState;
   menuScreen: MenuScreen;
 }
@@ -68,7 +66,7 @@ const initialState: GameState = {
   menuScreen: MenuScreen.Main,
 };
 
-const tileEffectMap: Record<string, { health: number; moves: number }> = {
+export const tileEffectMap: Record<string, { health: number; moves: number }> = {
   B: { health: 0, moves: -1 },
   S: { health: -5, moves: 0 },
   L: { health: -10, moves: -10 },
