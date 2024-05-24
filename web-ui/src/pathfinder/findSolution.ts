@@ -79,11 +79,7 @@ class FindSolution {
   }
 
   private continueTraversal(character: CharacterState): boolean {
-    const visits = this.visitedTiles.getVisited(character.position);
-    if (!visits) {
-      this.visitedTiles.setVisited(character);
-      return true;
-    }
+    const visits = this.visitedTiles.getVisited(character.position) ?? [];
     for (const visit of visits) {
       // stop traversing if a prvious path arrived here with objectively better stats
       if (visit.health >= character.health && visit.moves >= character.moves) return false;
