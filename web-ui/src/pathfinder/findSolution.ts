@@ -162,6 +162,5 @@ class FindSolution {
 export const findSolution = (map: Tile[][], character: CharacterState) => {
   const findSolution = new FindSolution(map, character);
   const result = findSolution.isSolvable(character);
-  console.log(findSolution.findSolution(character));
   return result;
 };
