@@ -1,6 +1,6 @@
 import { expect, test } from "vitest";
 import { findSolution } from "./findSolution";
-import { Tile } from "../generateMap/generateMap";
+import { Tile, generateMap } from "../generateMap/generateMap";
 import { CharacterState } from "../redux/gameSlice";
 
 const map: Tile[][] = [
@@ -29,4 +29,15 @@ test("map to be unsolvable with player stats", () => {
     health: 2,
   };
   expect(findSolution(map, character)).toBe(false);
+});
+
+test("map to be solvable with player stats", () => {
+  const character: CharacterState = {
+    position: { x: 0, y: 0 },
+    endpoint: { x: 12, y: 12 },
+    moves: 200,
+    health: 450,
+  };
+  const map = generateMap(123, 25);
+  expect(findSolution(map, character)).toBe(true);
 });

@@ -69,13 +69,22 @@ class GameMap {
   }
 }
 
+type Solution = {
+  character: CharacterState;
+  path: PlayerInput[];
+};
+
 class FindSolution {
   private readonly gameMap;
-  private readonly visitedTiles;
+  private visitedTiles;
+  private solution: Solution | null;
+  private readonly character: CharacterState;
 
-  constructor(gameMap: Tile[][]) {
+  constructor(gameMap: Tile[][], character: CharacterState) {
     this.gameMap = new GameMap(gameMap);
     this.visitedTiles = new VisitedTiles();
+    this.solution = null;
+    this.character = character;
   }
 
   private continueTraversal(character: CharacterState): boolean {
@@ -108,9 +117,51 @@ class FindSolution {
     }
     return false;
   }
+
+  private isLessThan(character: CharacterState) {
+    const currentScore =
+      (this?.solution?.character?.health ?? 0) + (this?.solution?.character?.moves ?? 0);
+    return currentScore < character.health + character.moves;
+  }
+
+  private _findSolution(character: CharacterState, path: PlayerInput[]) {
+    // base case
+    if (!this.isLessThan(character)) return this.solution;
+    // success
+    if (eq(character.endpoint, character.position)) {
+      if (this.isLessThan(character)) {
+        this.solution = {
+          path,
+          character,
+        };
+      }
+      return this.solution;
+    }
+
+    for (const direction of [
+      PlayerInput.Left,
+      PlayerInput.Up,
+      PlayerInput.Right,
+      PlayerInput.Down,
+    ]) {
+      const nextPosition = this.gameMap.move(character, direction);
+      if (nextPosition && this.continueTraversal(nextPosition))
+        this._findSolution(nextPosition, [...path, direction]);
+    }
+    return this.solution;
+  }
+
+  findSolution(character: CharacterState) {
+    const result = this._findSolution(character, []);
+    this.visitedTiles = new VisitedTiles();
+    this.solution = null;
+    return result;
+  }
 }
 
 export const findSolution = (map: Tile[][], character: CharacterState) => {
-  const findSolution = new FindSolution(map);
-  return findSolution.isSolvable(character);
+  const findSolution = new FindSolution(map, character);
+  const result = findSolution.isSolvable(character);
+  console.log(findSolution.findSolution(character));
+  return result;
 };
