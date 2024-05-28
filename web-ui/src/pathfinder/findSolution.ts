@@ -78,13 +78,11 @@ class FindSolution {
   private readonly gameMap;
   private visitedTiles;
   private solution: Solution | null;
-  private readonly character: CharacterState;
 
-  constructor(gameMap: Tile[][], character: CharacterState) {
+  constructor(gameMap: Tile[][]) {
     this.gameMap = new GameMap(gameMap);
     this.visitedTiles = new VisitedTiles();
     this.solution = null;
-    this.character = character;
   }
 
   private continueTraversal(character: CharacterState): boolean {
@@ -160,7 +158,7 @@ class FindSolution {
 }
 
 export const findSolution = (map: Tile[][], character: CharacterState) => {
-  const findSolution = new FindSolution(map, character);
+  const findSolution = new FindSolution(map);
   const result = findSolution.isSolvable(character);
   return result;
 };
