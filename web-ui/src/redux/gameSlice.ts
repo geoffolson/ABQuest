@@ -49,6 +49,11 @@ export const enum MenuScreen {
   Login,
 }
 
+const generateEndpoint = () => ({
+  x: Math.floor(Math.random() * 50),
+  y: Math.floor(Math.random() * 50),
+});
+
 export const initialHealth = 200;
 export const initialMoves = 450;
 const generateSeed = () => Math.floor(Math.random() * seedScale);
@@ -59,7 +64,7 @@ const initialState: GameState = {
   position: { x: 24, y: 24 },
   health: initialHealth,
   moves: initialMoves,
-  endpoint: { x: Math.floor(Math.random() * 50), y: Math.floor(Math.random() * 50) },
+  endpoint: generateEndpoint(),
   seed: initialSeed,
   gameMap: generateMap(initialSeed, gameMapWidth),
   playerState: PlayerState.Pause,
@@ -124,7 +129,7 @@ export const playerSlice = createSlice({
     newGame: (state) => {
       const username = state.username;
       const savedGameId = state.savedGameId;
-      state = { ...initialState, username, savedGameId };
+      state = { ...initialState, username, savedGameId, endpoint: generateEndpoint() };
       state.seed = generateSeed();
       state.gameMap = generateMap(state.seed, gameMapWidth);
       state.playerState = PlayerState.Playing;
