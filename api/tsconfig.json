@@ -8,5 +8,6 @@
     "esModuleInterop": true,
     "typeRoots": ["./node_modules/@types", "./types"]
   },
+  "files": ["types/express.d.ts"],
   "include": ["src/**/*.ts", "types/**/*.d.ts"]
 }
