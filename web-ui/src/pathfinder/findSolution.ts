@@ -156,6 +156,7 @@ class FindSolution {
       if (nextPosition && this.continueTraversal(nextPosition))
         this._findSolution(nextPosition, [...path, direction]);
     }
+    return this.solution;
   }
 
   findSolution(character: CharacterState) {
@@ -168,7 +169,6 @@ class FindSolution {
 
 export const findSolution = (map: Tile[][], character: CharacterState) => {
   const findSolution = new FindSolution(map);
-  findSolution.findSolution(character);
-  const result = findSolution.isSolvable(character);
+  const result = findSolution.findSolution(character);
   return result;
 };

@@ -18,7 +18,7 @@ test("map to be solvable with player stats", () => {
     moves: 1,
     health: 35,
   };
-  expect(findSolution(map, character)).toBe(true);
+  expect(!!findSolution(map, character)).toBe(true);
 });
 
 test("map to be unsolvable with player stats", () => {
@@ -28,16 +28,20 @@ test("map to be unsolvable with player stats", () => {
     moves: 1,
     health: 2,
   };
-  expect(findSolution(map, character)).toBe(false);
+  expect(!!findSolution(map, character)).toBe(false);
 });
 
 test("map to be solvable with player stats", () => {
   const character: CharacterState = {
-    position: { x: 0, y: 0 },
-    endpoint: { x: 15, y: 15 },
+    position: { x: 24, y: 24 },
+    endpoint: { x: 49, y: 0 },
     moves: 200,
     health: 450,
   };
-  const map = generateMap(123, 25);
-  expect(findSolution(map, character)).toBe(true);
+  let map = generateMap(123, 50);
+  let solution = findSolution(map, character);
+  expect(!!solution).toBe(true);
+  map = generateMap(222, 50);
+  solution = findSolution(map, character);
+  expect(!!solution).toBe(true);
 });
