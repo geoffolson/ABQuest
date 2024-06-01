@@ -9,7 +9,7 @@ import { usePathfinder } from "../worker/useWorker";
 export const MainMenu = () => {
   const dispatch = useDispatch();
   const username = useSelector((state: RootState) => state.game.username);
-  const pathRef = usePathfinder();
+  usePathfinder();
   return (
     <div className="flex gap-4 flex-col">
       <Button hidden={!!username} onClick={() => dispatch(loginScreen())}>
