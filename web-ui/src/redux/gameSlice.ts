@@ -15,6 +15,7 @@ export const enum PlayerState {
   Playing,
   Lost,
   Won,
+  Pathfinding,
 }
 
 export type CharacterState = {
@@ -34,6 +35,7 @@ export interface GameState extends SaveState {
   gameMap: Tile[][];
   playerState: PlayerState;
   menuScreen: MenuScreen;
+  path: PlayerInput[] | null;
 }
 
 export const enum PlayerInput {
@@ -59,6 +61,7 @@ export const initialMoves = 450;
 const generateSeed = () => Math.floor(Math.random() * seedScale);
 const initialSeed = generateSeed();
 const initialState: GameState = {
+  path: null,
   username: null,
   savedGameId: null,
   position: { x: 24, y: 24 },
@@ -82,6 +85,13 @@ export const playerSlice = createSlice({
   name: "player",
   initialState,
   reducers: {
+    pathfinding: (state, action: PayloadAction<boolean>) => {
+      if (action.payload) state.playerState = PlayerState.Pathfinding;
+      else state.playerState = PlayerState.Pause;
+    },
+    updatePath: (state, action: PayloadAction<PlayerInput[] | null>) => {
+      state.path = action.payload;
+    },
     move: (state, action: PayloadAction<PlayerInput>) => {
       if (
         state.playerState === PlayerState.Pause ||
@@ -186,6 +196,8 @@ export const {
   loginScreen,
   logOut,
   saveUser,
+  pathfinding,
+  updatePath,
 } = playerSlice.actions;
 
 export default playerSlice.reducer;

@@ -69,21 +69,25 @@ class GameMap {
   }
 }
 
-type Solution = {
+export type Solution = {
   character: CharacterState;
   path: PlayerInput[];
 };
 
-class FindSolution {
+const directions = [PlayerInput.Left, PlayerInput.Up, PlayerInput.Right, PlayerInput.Down];
+
+export class FindSolution {
   private readonly gameMap;
   private visitedTiles;
-  private solution: Solution | null;
+  protected solution: Solution | null;
 
   constructor(gameMap: Tile[][]) {
     this.gameMap = new GameMap(gameMap);
     this.visitedTiles = new VisitedTiles();
     this.solution = null;
   }
+
+  public setCurrentPath(path: PlayerInput[]) {}
 
   private continueTraversal(character: CharacterState): boolean {
     // stop traversing if a solution with better stats than current path already exists
@@ -103,48 +107,34 @@ class FindSolution {
     return true;
   }
 
-  isSolvable(character: CharacterState): boolean {
-    // base case
-    if (character.health < 0 || character.moves < 0) return false;
-    // success
-    if (eq(character.endpoint, character.position)) return true;
-
-    for (const direction of [
-      PlayerInput.Left,
-      PlayerInput.Up,
-      PlayerInput.Right,
-      PlayerInput.Down,
-    ]) {
-      const nextPosition = this.gameMap.move(character, direction);
-      if (nextPosition && this.continueTraversal(nextPosition)) {
-        const result = this.isSolvable(nextPosition);
-        if (result) return true;
-      }
-    }
-    return false;
-  }
-
   private solutionIsLessThan(character: CharacterState) {
     const currentScore =
       (this?.solution?.character?.health ?? 0) + (this?.solution?.character?.moves ?? 0);
     return currentScore < character.health + character.moves;
   }
 
+  public setSolution(solution: Solution) {
+    this.solution = solution;
+  }
+
   private _findSolution(character: CharacterState, path: PlayerInput[]) {
+    this.setCurrentPath(path);
     // base case
-    if (character.health < 0 || character.moves < 0) return null;
+    if (character.health < 0 || character.moves < 0) {
+      return null;
+    }
     // success
     if (eq(character.endpoint, character.position)) {
       if (this.solutionIsLessThan(character)) {
-        this.solution = {
+        this.setSolution({
           path,
           character,
-        };
+        });
       }
       return this.solution;
     }
 
-    const nextPositions = [PlayerInput.Left, PlayerInput.Up, PlayerInput.Right, PlayerInput.Down]
+    const nextPositions = directions
       .map((direction) => [direction, this.gameMap.move(character, direction)])
       .filter((nextPosition) => !!nextPosition[1]) as [PlayerInput, CharacterState][];
     nextPositions.sort(

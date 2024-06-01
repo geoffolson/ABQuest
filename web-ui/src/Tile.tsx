@@ -10,10 +10,12 @@ export const Tile = ({
   tile,
   isPlayer,
   isEndpoint,
+  isPath,
 }: {
   tile: TileType;
   isPlayer?: boolean;
   isEndpoint?: boolean;
+  isPath?: boolean;
 }) => {
   const imgURL = useMemo(() => {
     return {
@@ -32,7 +34,8 @@ export const Tile = ({
         className={classNames(
           "pb-[100%]",
           { "bg-blue-700": isPlayer },
-          { "bg-green-700": isEndpoint && !isPlayer }
+          { "bg-green-700": isEndpoint && !isPlayer },
+          { "bg-purple-700": isPath && !isEndpoint && !isPlayer }
         )}
       />
     </div>
