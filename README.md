@@ -54,6 +54,51 @@ To currently check if a set of grids are solvable navigate to the web-ui directo
 npm run test
 ```
 
-Function findSolution will perform a depth first search for a possible solution. When one is found the function returns true, otherwise it will return false. More work will be done. Future version will search for and return the optimal path and be integrated into the frontend application.
+Function findSolution will perform a depth first search for the optimal path. When the optimal path is found an object is returned with a path array and character stats after traversing the path.
+
+### Optimizations
+
+#### Traversal Direction
+
+In the implementation of \_findSolution the for loop making the recursive calls was traversing left first on the map, then up, right, then down. In the updated implementation findSolution traverses to the direction that reduces the manhattan distance to the endpoint first. This small optimization lead to a 10x performance boost in some of the auto-generated maps
+
+```typescript
+const nextPositions = [PlayerInput.Left, PlayerInput.Up, PlayerInput.Right, PlayerInput.Down]
+  .map((direction) => [direction, this.gameMap.move(character, direction)])
+  .filter((nextPosition) => !!nextPosition[1]) as [PlayerInput, CharacterState][];
+nextPositions.sort(
+  (a, b) =>
+    manhattanDistance(a[1].position, character.endpoint) -
+    manhattanDistance(b[1].position, character.endpoint)
+);
+
+for (const [direction, nextPosition] of nextPositions) {
+  if (nextPosition && this.continueTraversal(nextPosition))
+    this._findSolution(nextPosition, [...path, direction]);
+}
+return this.solution;
+```
+
+#### Traversal Conditions
+
+In the continueTraversal method another minor optimization was added leading to another 10x performance increase. Here, a check if a solution has already been found and whether the stats are better than the current path testing. If so, there's no need to continue and this path can be pruned.
+
+```typescript
+// stop traversing if a solution with better stats than current path already exists
+if (
+  this.solution &&
+  character.health + character.moves <
+    this.solution.character.health + this.solution.character.moves
+)
+  return false;
+
+const visits = this.visitedTiles.getVisited(character.position) ?? [];
+for (const visit of visits) {
+  // stop traversing if a previous path arrived here with objectively better stats
+  if (visit.health >= character.health && visit.moves >= character.moves) return false;
+}
+```
+
+### Implementation
 
 The current implementation is located in `/web-ui/src/pathfinder/findSolution.ts`

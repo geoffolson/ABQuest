@@ -86,14 +86,16 @@ class FindSolution {
   }
 
   private continueTraversal(character: CharacterState): boolean {
+    // stop traversing if a solution with better stats than current path already exists
+    if (
+      this.solution &&
+      character.health + character.moves <
+        this.solution.character.health + this.solution.character.moves
+    )
+      return false;
+
     const visits = this.visitedTiles.getVisited(character.position) ?? [];
     for (const visit of visits) {
-      if (
-        this.solution &&
-        visit.health < this.solution.character.health &&
-        visit.moves < this.solution.character.moves
-      )
-        return false;
       // stop traversing if a previous path arrived here with objectively better stats
       if (visit.health >= character.health && visit.moves >= character.moves) return false;
     }
@@ -122,7 +124,7 @@ class FindSolution {
     return false;
   }
 
-  private isLessThan(character: CharacterState) {
+  private solutionIsLessThan(character: CharacterState) {
     const currentScore =
       (this?.solution?.character?.health ?? 0) + (this?.solution?.character?.moves ?? 0);
     return currentScore < character.health + character.moves;
@@ -130,10 +132,10 @@ class FindSolution {
 
   private _findSolution(character: CharacterState, path: PlayerInput[]) {
     // base case
-    if (!this.isLessThan(character)) return this.solution;
+    if (character.health < 0 || character.moves < 0) return null;
     // success
     if (eq(character.endpoint, character.position)) {
-      if (this.isLessThan(character)) {
+      if (this.solutionIsLessThan(character)) {
         this.solution = {
           path,
           character,
@@ -151,8 +153,7 @@ class FindSolution {
         manhattanDistance(b[1].position, character.endpoint)
     );
 
-    for (const next of nextPositions) {
-      const [direction, nextPosition] = next;
+    for (const [direction, nextPosition] of nextPositions) {
       if (nextPosition && this.continueTraversal(nextPosition))
         this._findSolution(nextPosition, [...path, direction]);
     }
