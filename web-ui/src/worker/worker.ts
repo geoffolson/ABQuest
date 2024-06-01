@@ -5,6 +5,7 @@ import { Tile } from "../generateMap/generateMap";
 class ReduxFindSolution extends FindSolution {
   private onNextPath;
   private onSetSolution;
+  private updateCounter = 0;
   constructor(
     gameMap: Tile[][],
     onNextPath: (path: PlayerInput[], currentSolution: Solution | null) => void,
@@ -15,7 +16,12 @@ class ReduxFindSolution extends FindSolution {
     this.onSetSolution = onSetSolution;
   }
   public setCurrentPath(path: PlayerInput[]): void {
-    this.onNextPath(path, this.solution);
+    ++this.updateCounter;
+    // To avoid excessive message passing slowing down the worker
+    if (this.updateCounter > 5000) {
+      this.updateCounter = 0;
+      this.onNextPath(path, this.solution);
+    }
   }
   public setSolution(solution: Solution): void {
     super.setSolution(solution);
@@ -29,7 +35,7 @@ self.onmessage = (event) => {
     solver = new ReduxFindSolution(
       event.data.gameMap,
       (path, solution) => {
-        if (!solution && Math.random() < 0.005) self.postMessage({ type: "current-path", path });
+        if (!solution) self.postMessage({ type: "current-path", path });
       },
       (solution) => self.postMessage({ type: "current-path", path: solution.path })
     );

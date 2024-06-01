@@ -45,9 +45,12 @@ export const usePathfinder = () => {
             break;
           }
           case "solution": {
-            pathRef.current = event.data.path;
             window.cancelAnimationFrame(animationFrameHandle);
+            pathRef.current = event.data?.solution?.path;
             dispatch(pathfinding(false));
+            dispatch(updatePath(pathRef.current));
+            if (pathRef.current) console.log("Optimal Solution Found", event.data.solution);
+            else console.log("No solution");
             break;
           }
         }

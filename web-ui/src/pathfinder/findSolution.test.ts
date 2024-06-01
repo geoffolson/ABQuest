@@ -45,3 +45,15 @@ test("map to be solvable with player stats", () => {
   solution = findSolution(map, character);
   expect(!!solution).toBe(true);
 });
+
+test("test player provided map for optimal solution", () => {
+  const character: CharacterState = {
+    endpoint: { x: 42, y: 16 },
+    position: { x: 24, y: 24 },
+    moves: 200,
+    health: 450,
+  };
+  let map = generateMap(10582, 50);
+  let solution = findSolution(map, character);
+  expect((solution?.character?.moves ?? 0) + (solution?.character?.health ?? 0)).toBe(624);
+});
