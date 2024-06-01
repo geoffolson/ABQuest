@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 *.db
+*.db-journal
 
 # Editor directories and files
 .vscode/*
