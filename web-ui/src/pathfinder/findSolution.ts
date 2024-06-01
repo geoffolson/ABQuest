@@ -87,7 +87,7 @@ export class FindSolution {
     this.solution = null;
   }
 
-  public setCurrentPath(path: PlayerInput[]) {}
+  public setCurrentPath(_path: PlayerInput[]) {}
 
   private continueTraversal(character: CharacterState): boolean {
     // stop traversing if a solution with better stats than current path already exists
