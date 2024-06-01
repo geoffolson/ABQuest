@@ -1,6 +1,6 @@
 import { Tile } from "../generateMap/generateMap";
 import { CharacterState, PlayerInput, Vector2, tileEffectMap } from "../redux/gameSlice";
-import { eq } from "../utils";
+import { eq, manhattanDistance } from "../utils";
 
 type Heuristic = { health: number; moves: number };
 
@@ -136,17 +136,20 @@ class FindSolution {
       return this.solution;
     }
 
-    for (const direction of [
-      PlayerInput.Left,
-      PlayerInput.Up,
-      PlayerInput.Right,
-      PlayerInput.Down,
-    ]) {
-      const nextPosition = this.gameMap.move(character, direction);
+    const nextPositions = [PlayerInput.Left, PlayerInput.Up, PlayerInput.Right, PlayerInput.Down]
+      .map((direction) => [direction, this.gameMap.move(character, direction)])
+      .filter((nextPosition) => !!nextPosition[1]) as [PlayerInput, CharacterState][];
+    nextPositions.sort(
+      (a, b) =>
+        manhattanDistance(a[1].position, character.endpoint) -
+        manhattanDistance(b[1].position, character.endpoint)
+    );
+
+    for (const next of nextPositions) {
+      const [direction, nextPosition] = next;
       if (nextPosition && this.continueTraversal(nextPosition))
         this._findSolution(nextPosition, [...path, direction]);
     }
-    return this.solution;
   }
 
   findSolution(character: CharacterState) {
@@ -159,6 +162,7 @@ class FindSolution {
 
 export const findSolution = (map: Tile[][], character: CharacterState) => {
   const findSolution = new FindSolution(map);
+  findSolution.findSolution(character);
   const result = findSolution.isSolvable(character);
   return result;
 };

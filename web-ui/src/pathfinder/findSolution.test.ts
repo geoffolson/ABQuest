@@ -34,7 +34,7 @@ test("map to be unsolvable with player stats", () => {
 test("map to be solvable with player stats", () => {
   const character: CharacterState = {
     position: { x: 0, y: 0 },
-    endpoint: { x: 12, y: 12 },
+    endpoint: { x: 15, y: 15 },
     moves: 200,
     health: 450,
   };
