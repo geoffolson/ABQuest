@@ -10,6 +10,13 @@ import lavaImgURL from "./assets/lava.png";
 import mudImgURL from "./assets/mud.png";
 import asphaltImgURL from "./assets/asphalt.png";
 
+const tileDepthMap: Record<TileType, number> = {
+  M: -0.2,
+  B: 0,
+  S: 0.2,
+  L: 0,
+};
+
 const GameTile = ({ position, tile }: { position: Vector2; tile: TileType }) => {
   const lava = useLoader(TextureLoader, lavaImgURL);
   const sand = useLoader(TextureLoader, sandImgURL);
@@ -22,7 +29,7 @@ const GameTile = ({ position, tile }: { position: Vector2; tile: TileType }) => 
     L: lava,
   }[tile];
   return (
-    <mesh position={[position.x, position.y, 0]}>
+    <mesh position={[position.x, position.y, tileDepthMap[tile]]}>
       <boxGeometry />
       <meshStandardMaterial map={colorMap} />
     </mesh>
@@ -30,12 +37,14 @@ const GameTile = ({ position, tile }: { position: Vector2; tile: TileType }) => 
 };
 
 const Character = ({ position, color }: { position: Vector2; color: string }) => {
+  const gameMap = useSelector((state: RootState) => state.game.gameMap);
+  const z = tileDepthMap[gameMap[position.y][position.x]] + 0.7;
   const ref = useRef<Mesh>(null);
   useFrame((_state, delta) => {
     if (ref.current) ref.current.rotation.z += delta;
   });
   return (
-    <mesh ref={ref} position={[position.x, -position.y, 0.7]}>
+    <mesh ref={ref} position={[position.x, -position.y, z]}>
       <boxGeometry args={[0.5, 0.5, 0.5]} />
       <meshStandardMaterial color={color} />
     </mesh>
