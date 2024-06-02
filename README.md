@@ -2,7 +2,7 @@
 
 Simple adventure game with procedurally generated maps using perlin noise, local save system, and cloud saving. The API for managing saved games is built using Typescript, Express, Prisma, and Zod for input validation.
 
-Try the live [demo](http://ec2-34-216-78-119.us-west-2.compute.amazonaws.com/)
+Try the live [demo](http://ec2-35-85-50-64.us-west-2.compute.amazonaws.com/)
 
 # Install
 
