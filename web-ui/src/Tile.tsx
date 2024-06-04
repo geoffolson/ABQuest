@@ -11,11 +11,13 @@ export const Tile = ({
   isPlayer,
   isEndpoint,
   isPath,
+  isSolution,
 }: {
   tile: TileType;
   isPlayer?: boolean;
   isEndpoint?: boolean;
   isPath?: boolean;
+  isSolution?: boolean;
 }) => {
   const imgURL = useMemo(() => {
     return {
@@ -35,7 +37,9 @@ export const Tile = ({
           "pb-[100%]",
           { "bg-blue-700": isPlayer },
           { "bg-green-700": isEndpoint && !isPlayer },
-          { "bg-purple-700": isPath && !isEndpoint && !isPlayer }
+          { "bg-green-400": isSolution && !isEndpoint && !isPlayer },
+          { "bg-purple-700": isPath && !isSolution && !isEndpoint && !isPlayer },
+          { "bg-gray-700": isPath && isSolution && !isEndpoint && !isPlayer }
         )}
       />
     </div>

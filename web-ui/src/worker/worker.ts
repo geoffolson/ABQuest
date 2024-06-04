@@ -34,10 +34,13 @@ self.onmessage = (event) => {
   if (event.data.type === "init") {
     solver = new ReduxFindSolution(
       event.data.gameMap,
-      (path, solution) => {
-        if (!solution) self.postMessage({ type: "current-path", path });
+      (path) => {
+        self.postMessage({ type: "current-path", path });
       },
-      (solution) => self.postMessage({ type: "current-path", path: solution.path })
+      (solution) => {
+        self.postMessage({ type: "current-path", path: solution.path });
+        self.postMessage({ type: "current-solution", path: solution.path });
+      }
     );
     self.postMessage({ type: "current-path", path: [] });
     const solution = solver.findSolution(event.data.character);

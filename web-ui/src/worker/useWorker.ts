@@ -1,4 +1,10 @@
-import { PlayerInput, PlayerState, pathfinding, updatePath } from "../redux/gameSlice";
+import {
+  PlayerInput,
+  PlayerState,
+  pathfinding,
+  updatePath,
+  updateSolution,
+} from "../redux/gameSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/rootReducer";
 import { useEffect, useMemo, useRef } from "react";
@@ -12,6 +18,7 @@ export const usePathfinder = () => {
   const gameMap = useSelector((state: RootState) => state.game.gameMap);
 
   const pathRef = useRef<PlayerInput[] | null>(null);
+  const solutionRef = useRef<PlayerInput[] | null>(null);
   const workerRef = useRef<Worker | null>(null);
   const animationFrameHandleRef = useRef<number>(0);
 
@@ -39,6 +46,7 @@ export const usePathfinder = () => {
       // animation path request callback
       const requestPath = () => {
         dispatch(updatePath(pathRef.current));
+        dispatch(updateSolution(solutionRef.current));
         animationFrameHandleRef.current = window.requestAnimationFrame(requestPath);
       };
       animationFrameHandleRef.current = window.requestAnimationFrame(requestPath);
@@ -49,11 +57,16 @@ export const usePathfinder = () => {
             pathRef.current = event.data.path;
             break;
           }
+          case "current-solution": {
+            solutionRef.current = event.data.path;
+            break;
+          }
           case "solution": {
             window.cancelAnimationFrame(animationFrameHandleRef.current);
             pathRef.current = event.data?.solution?.path;
             dispatch(pathfinding(false));
             dispatch(updatePath(pathRef.current));
+            dispatch(updateSolution(pathRef.current));
             if (pathRef.current) console.log("Optimal Solution Found", event.data.solution);
             else console.log("No solution");
             break;
@@ -72,5 +85,6 @@ export const usePathfinder = () => {
     terminate();
     dispatch(pathfinding(false));
     dispatch(updatePath(null));
+    dispatch(updateSolution(null));
   };
 };

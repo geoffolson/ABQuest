@@ -36,6 +36,7 @@ export interface GameState extends SaveState {
   playerState: PlayerState;
   menuScreen: MenuScreen;
   path: PlayerInput[] | null;
+  solution: PlayerInput[] | null;
 }
 
 export const enum PlayerInput {
@@ -62,6 +63,7 @@ const generateSeed = () => Math.floor(Math.random() * seedScale);
 const initialSeed = generateSeed();
 const initialState: GameState = {
   path: null,
+  solution: null,
   username: null,
   savedGameId: null,
   position: { x: 24, y: 24 },
@@ -92,6 +94,9 @@ export const playerSlice = createSlice({
     updatePath: (state, action: PayloadAction<PlayerInput[] | null>) => {
       state.path = action.payload;
     },
+    updateSolution: (state, action: PayloadAction<PlayerInput[] | null>) => {
+      state.solution = action.payload;
+    },
     move: (state, action: PayloadAction<PlayerInput>) => {
       if (state.playerState !== PlayerState.Playing) {
         if (action.payload === PlayerInput.Pause && state.playerState !== PlayerState.Pathfinding) {
@@ -101,6 +106,7 @@ export const playerSlice = createSlice({
       }
 
       state.path = null;
+      state.solution = null;
       switch (action.payload) {
         case PlayerInput.Down: {
           if (state.position.y === gameMapWidth - 1) return;
@@ -146,6 +152,7 @@ export const playerSlice = createSlice({
     loadGame: (state, action: PayloadAction<SaveState | undefined>) => {
       state = { ...state, ...action.payload };
       state.path = null;
+      state.solution = null;
       state.gameMap = generateMap(state.seed, gameMapWidth);
       state.playerState = PlayerState.Playing;
       return state;
@@ -197,6 +204,7 @@ export const {
   saveUser,
   pathfinding,
   updatePath,
+  updateSolution,
 } = playerSlice.actions;
 
 export default playerSlice.reducer;
