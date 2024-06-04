@@ -12,15 +12,19 @@ function App() {
   const onKeyDown = (e: KeyboardEvent) => {
     switch (e.code) {
       case "ArrowUp":
+      case "KeyW":
         dispatch(move(PlayerInput.Up));
         break;
       case "ArrowDown":
+      case "KeyS":
         dispatch(move(PlayerInput.Down));
         break;
       case "ArrowLeft":
+      case "KeyA":
         dispatch(move(PlayerInput.Left));
         break;
       case "ArrowRight":
+      case "KeyD":
         dispatch(move(PlayerInput.Right));
         break;
       case "Escape":
