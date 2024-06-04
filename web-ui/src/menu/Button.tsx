@@ -15,7 +15,7 @@ export const Button = ({
         {
           "bg-gray-600 text-gray-500": props.disabled || isLoading,
         },
-        { "bg-transparent text-gray-800": variant === "secondary" }
+        { "bg-transparent": variant === "secondary" }
       )}
       {...props}
     />
