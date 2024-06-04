@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm run build --workspaces"
+    "build": "npm run build --workspaces",
+    "lc": "npx cloc --include-lang=Typescript --exclude-dir=node_modules ."
   },
   "author": "Geoffrey Olson Jr.",
   "license": "MIT",

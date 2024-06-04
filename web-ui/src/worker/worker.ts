@@ -18,7 +18,7 @@ class ReduxFindSolution extends FindSolution {
   public setCurrentPath(path: PlayerInput[]): void {
     ++this.updateCounter;
     // To avoid excessive message passing slowing down the worker
-    if (this.updateCounter > 5000) {
+    if (this.updateCounter > 1000) {
       this.updateCounter = 0;
       this.onNextPath(path, this.solution);
     }

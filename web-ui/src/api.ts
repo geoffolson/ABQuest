@@ -1,3 +1,4 @@
+import { SavedState } from "common";
 import { SaveState } from "./redux/gameSlice";
 import { tokenKey } from "./redux/middleware";
 
@@ -19,8 +20,8 @@ const _fetch = (input: URL | RequestInfo, init?: RequestInit) => {
     if ([400, 401, 500].includes(res.status)) {
       return res
         .json()
-        .catch((e) => {
-          throw { message: res.statusText };
+        .catch((_e) => {
+          throw new Error(res.statusText);
         })
         .then((e: APIError) => {
           throw e;
@@ -41,7 +42,16 @@ const userPostJson = <T>(input: URL | RequestInfo, data: T) => {
 export const userAPI = {
   getProfile: () => _fetch("/profile").then((res) => res.json()),
 
-  getSavedGame: (): Promise<SaveState> => _fetch("/save").then((res) => res.json()),
+  getSavedGame: (): Promise<SaveState> =>
+    _fetch("/save")
+      .then((res) => res.json())
+      .then((data) => {
+        try {
+          return SavedState.parse(data);
+        } catch (e) {
+          throw new Error("Validation Error");
+        }
+      }),
 
   saveGame: (data: SaveState) => userPostJson("/save", data),
 
