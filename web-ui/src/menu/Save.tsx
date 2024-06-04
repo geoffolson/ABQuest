@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "./Button";
 import { saveGame, saveUser } from "../redux/gameSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../redux/store";
+import { RootState } from "../redux/rootReducer";
 import { userAPI } from "../api";
 
 export const Save = () => {

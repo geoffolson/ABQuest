@@ -6,7 +6,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { PrismaClient } from "@prisma/client";
 import { z } from "zod";
-import { savedState, UserRegistration } from "common";
+import { SavedState, UserRegistration } from "common";
 
 const prisma = new PrismaClient();
 const app = express();
@@ -94,7 +94,7 @@ app.get("/save", passport.authenticate("jwt", { session: false }), async (req, r
 });
 
 app.post("/save", passport.authenticate("jwt", { session: false }), async (req, res) => {
-  const body = savedState.parse(req.body);
+  const body = SavedState.parse(req.body);
   const data = {
     positionX: body.position.x,
     positionY: body.position.y,

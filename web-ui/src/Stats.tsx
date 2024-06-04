@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { RootState } from "./redux/store";
+import { RootState } from "./redux/rootReducer";
 import { initialHealth, initialMoves } from "./redux/gameSlice";
 
 export const Stats = () => {

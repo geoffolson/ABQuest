@@ -1,4 +1,5 @@
 import { SaveState } from "./redux/gameSlice";
+import { tokenKey } from "./redux/middleware";
 
 const baseURL = "/api";
 
@@ -7,7 +8,7 @@ export type APIError = {
 };
 
 const _fetch = (input: URL | RequestInfo, init?: RequestInit) => {
-  const token = window.localStorage.getItem("token") ?? "";
+  const token = window.localStorage.getItem(tokenKey) ?? "";
   return fetch(baseURL + input, {
     ...init,
     headers: {

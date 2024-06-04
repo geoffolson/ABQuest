@@ -1,5 +1,5 @@
 import { MenuScreen, PlayerState } from "../redux/gameSlice";
-import { RootState } from "../redux/store";
+import { RootState } from "../redux/rootReducer";
 import { useSelector } from "react-redux";
 import { MainMenu } from "./MainMenu";
 import { Win, Lost } from "./WinLoseMenu";

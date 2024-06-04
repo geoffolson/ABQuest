@@ -1,6 +1,6 @@
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";
 import { useSelector } from "react-redux";
-import { RootState } from "./redux/store";
+import { RootState } from "./redux/rootReducer";
 import { Vector2 } from "./redux/gameSlice";
 import { Tile as TileType } from "./generateMap/generateMap";
 import { useRef } from "react";

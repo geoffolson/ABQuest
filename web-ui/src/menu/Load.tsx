@@ -2,7 +2,7 @@ import { hasLocalSavedGame } from "../utils";
 import { Button } from "./Button";
 import { loadGame } from "../redux/gameSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../redux/store";
+import { RootState } from "../redux/rootReducer";
 import { userAPI } from "../api";
 import { useState } from "react";
 

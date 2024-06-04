@@ -1,6 +1,6 @@
 import { PlayerInput, PlayerState, pathfinding, updatePath } from "../redux/gameSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../redux/store";
+import { RootState } from "../redux/rootReducer";
 import { useEffect, useMemo, useRef } from "react";
 
 export const createWorker = () => {

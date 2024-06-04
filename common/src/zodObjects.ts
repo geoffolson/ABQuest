@@ -5,14 +5,14 @@ export const UserRegistration = z.object({
   password: z.string(),
 });
 
-export const vector = z.object({
+export const Vector = z.object({
   x: z.number(),
   y: z.number(),
 });
 
-export const savedState = z.object({
-  position: vector,
-  endpoint: vector,
+export const SavedState = z.object({
+  position: Vector,
+  endpoint: Vector,
   health: z.number(),
   moves: z.number(),
   seed: z.number(),

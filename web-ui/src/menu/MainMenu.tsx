@@ -3,7 +3,7 @@ import { newGame, registerScreen, loginScreen, logOut, pathfinding } from "../re
 import { useDispatch, useSelector } from "react-redux";
 import { Save } from "./Save";
 import { Load } from "./Load";
-import { RootState } from "../redux/store";
+import { RootState } from "../redux/rootReducer";
 
 export const MainMenu = () => {
   const dispatch = useDispatch();

@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { RootState } from "./redux/store";
+import { RootState } from "./redux/rootReducer";
 import { Tile } from "./Tile";
 import { eq, pathCoordinates } from "./utils";
 import { Vector2 } from "./redux/gameSlice";
