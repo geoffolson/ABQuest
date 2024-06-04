@@ -93,16 +93,14 @@ export const playerSlice = createSlice({
       state.path = action.payload;
     },
     move: (state, action: PayloadAction<PlayerInput>) => {
-      if (
-        state.playerState === PlayerState.Pause ||
-        state.playerState === PlayerState.Lost ||
-        state.playerState === PlayerState.Won
-      ) {
+      if (state.playerState !== PlayerState.Playing) {
         if (action.payload === PlayerInput.Pause) {
           state.playerState = PlayerState.Playing;
         }
         return;
       }
+
+      state.path = null;
       switch (action.payload) {
         case PlayerInput.Down: {
           if (state.position.y === gameMapWidth - 1) return;

@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { MainMenu } from "./MainMenu";
 import { Win, Lost } from "./WinLoseMenu";
 import { Register } from "./Register";
+import { Pathfinding } from "./Pathfinding";
 
 export const Modal = () => {
   const playerState = useSelector((state: RootState) => state.game.playerState);
@@ -22,10 +23,20 @@ export const Modal = () => {
 
         <div className="h-100 p-4">
           {(() => {
-            if (playerState === PlayerState.Won) return <Win />;
-            if (playerState === PlayerState.Lost) return <Lost />;
-            if (menuScreen === MenuScreen.Regisration) return <Register />;
-            if (menuScreen === MenuScreen.Login) return <Register login />;
+            switch (playerState) {
+              case PlayerState.Won:
+                return <Win />;
+              case PlayerState.Lost:
+                return <Lost />;
+              case PlayerState.Pathfinding:
+                return <Pathfinding />;
+            }
+            switch (menuScreen) {
+              case MenuScreen.Regisration:
+                return <Register />;
+              case MenuScreen.Login:
+                return <Register login />;
+            }
             return <MainMenu />;
           })()}
         </div>

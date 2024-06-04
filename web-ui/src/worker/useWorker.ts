@@ -12,6 +12,8 @@ export const usePathfinder = () => {
   const gameMap = useSelector((state: RootState) => state.game.gameMap);
 
   const pathRef = useRef<PlayerInput[] | null>(null);
+  const workerRef = useRef<Worker | null>(null);
+  const animationFrameHandleRef = useRef<number>(0);
 
   const position = useSelector((state: RootState) => state.game.position);
   const endpoint = useSelector((state: RootState) => state.game.endpoint);
@@ -24,28 +26,31 @@ export const usePathfinder = () => {
 
   const playerState = useSelector((state: RootState) => state.game.playerState);
 
+  const terminate = () => {
+    window.cancelAnimationFrame(animationFrameHandleRef.current);
+    workerRef.current?.terminate();
+  };
+
   useEffect(() => {
-    let worker: Worker | null = null;
-    let animationFrameHandle = 0;
-    if (playerState === PlayerState.Pathfinding && !worker && gameMap) {
-      worker = createWorker();
-      worker.postMessage({ type: "init", gameMap, character });
+    if (playerState === PlayerState.Pathfinding && !workerRef.current && gameMap) {
+      workerRef.current = createWorker();
+      workerRef.current.postMessage({ type: "init", gameMap, character });
 
       // animation path request callback
       const requestPath = () => {
         dispatch(updatePath(pathRef.current));
-        animationFrameHandle = window.requestAnimationFrame(requestPath);
+        animationFrameHandleRef.current = window.requestAnimationFrame(requestPath);
       };
-      animationFrameHandle = window.requestAnimationFrame(requestPath);
+      animationFrameHandleRef.current = window.requestAnimationFrame(requestPath);
 
-      worker.onmessage = (event) => {
+      workerRef.current.onmessage = (event) => {
         switch (event.data?.type) {
           case "current-path": {
             pathRef.current = event.data.path;
             break;
           }
           case "solution": {
-            window.cancelAnimationFrame(animationFrameHandle);
+            window.cancelAnimationFrame(animationFrameHandleRef.current);
             pathRef.current = event.data?.solution?.path;
             dispatch(pathfinding(false));
             dispatch(updatePath(pathRef.current));
@@ -57,9 +62,15 @@ export const usePathfinder = () => {
       };
     }
     return () => {
-      window.cancelAnimationFrame(animationFrameHandle);
-      worker?.terminate();
+      if (playerState !== PlayerState.Pathfinding) {
+        terminate();
+      }
     };
   }, [gameMap, character, playerState, dispatch]);
-  return pathRef;
+
+  return () => {
+    terminate();
+    dispatch(pathfinding(false));
+    dispatch(updatePath(null));
+  };
 };

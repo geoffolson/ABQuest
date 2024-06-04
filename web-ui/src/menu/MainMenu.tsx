@@ -4,12 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { Save } from "./Save";
 import { Load } from "./Load";
 import { RootState } from "../redux/store";
-import { usePathfinder } from "../worker/useWorker";
 
 export const MainMenu = () => {
   const dispatch = useDispatch();
   const username = useSelector((state: RootState) => state.game.username);
-  usePathfinder();
   return (
     <div className="flex gap-4 flex-col">
       <Button hidden={!!username} onClick={() => dispatch(loginScreen())}>
