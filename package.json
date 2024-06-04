@@ -1,0 +1,17 @@
+{
+  "name": "abquest",
+  "version": "0.0.1",
+  "description": "Simple adventure game with procedurally generated maps using perlin noise, local save system, and cloud saving. The API for managing saved games is built using Typescript, Express, Prisma, and Zod for input validation.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm run build --workspaces"
+  },
+  "author": "Geoffrey Olson Jr.",
+  "license": "MIT",
+  "workspaces": [
+    "common",
+    "api",
+    "web-ui"
+  ]
+}

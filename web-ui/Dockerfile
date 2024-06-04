@@ -1,26 +1,21 @@
-# Use an official Node.js image as the base
+# Use an official Node.js image as the base for building the application
 FROM node:latest AS builder
 
 # Set the working directory in the container
-WORKDIR /app
+WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json to the working directory
-COPY package*.json ./
-
-# Install dependencies
-RUN npm install
-
-# Copy the rest of the application code
+# Copy the entire project
 COPY . .
 
-# Build the frontend app
-RUN npm run build
+# Install dependencies and build the web-ui package
+RUN npm install
+RUN npm run build --workspaces
 
 # Use Nginx as the base image for serving the built files
 FROM nginx:latest
 
 # Copy the built files from the previous stage to the Nginx container
-COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder /usr/src/app/web-ui/dist /usr/share/nginx/html
 
 # Expose port 80 to the outside world
 EXPOSE 80

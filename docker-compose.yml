@@ -3,8 +3,8 @@ version: '3.8'
 services:
   nginx:
     build:
-      context: ./web-ui
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: web-ui/Dockerfile
     ports:
       - "80:80"
     volumes:
@@ -12,10 +12,10 @@ services:
 
   api:
     build:
-      context: ./api
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: api/Dockerfile
     ports:
       - "3000:3000"
     volumes:
-      - ./api/dev.db:/usr/src/app/dev.db
+      - ./api/dev.db:/usr/src/app/api/dev.db
 
