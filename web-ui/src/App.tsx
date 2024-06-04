@@ -35,11 +35,18 @@ function App() {
   };
   useEffect(() => {
     window.addEventListener("keydown", onKeyDown);
-    userAPI.getProfile().then((user) => dispatch(saveUser(user)));
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [dispatch]);
+  }, []);
   return (
-    <div className="h-screen bg-sky-900">
+    <div
+      ref={() => {
+        userAPI
+          .getProfile()
+          .then((user) => dispatch(saveUser(user)))
+          .catch((_e) => {});
+      }}
+      className="h-screen bg-sky-900"
+    >
       <World />
       <div className="flex flex-col w-full bg-gray-950">
         <div className="flex w-full content-between justify-between bg-blue-500"></div>

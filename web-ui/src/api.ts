@@ -17,9 +17,14 @@ const _fetch = (input: URL | RequestInfo, init?: RequestInit) => {
     },
   }).then((res) => {
     if ([400, 401, 500].includes(res.status)) {
-      return res.json().then((e: APIError) => {
-        throw e;
-      });
+      return res
+        .json()
+        .catch((e) => {
+          throw { message: res.statusText };
+        })
+        .then((e: APIError) => {
+          throw e;
+        });
     }
     return res;
   });
