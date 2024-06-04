@@ -53,7 +53,7 @@ test("test player provided map for optimal solution", () => {
     moves: 200,
     health: 450,
   };
-  let map = generateMap(10582, 50);
-  let solution = findSolution(map, character);
+  const map = generateMap(10582, 50);
+  const solution = findSolution(map, character);
   expect((solution?.character?.moves ?? 0) + (solution?.character?.health ?? 0)).toBe(624);
 });

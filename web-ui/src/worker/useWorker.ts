@@ -60,6 +60,6 @@ export const usePathfinder = () => {
       window.cancelAnimationFrame(animationFrameHandle);
       worker?.terminate();
     };
-  }, [gameMap, character, playerState]);
+  }, [gameMap, character, playerState, dispatch]);
   return pathRef;
 };

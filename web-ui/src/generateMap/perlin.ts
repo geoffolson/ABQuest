@@ -117,13 +117,13 @@ export const noise = {
     Y = Y & 255;
 
     // Calculate noise contributions from each of the four corners
-    let n00 = gradP[X + perm[Y]].dot2(x, y);
-    let n01 = gradP[X + perm[Y + 1]].dot2(x, y - 1);
-    let n10 = gradP[X + 1 + perm[Y]].dot2(x - 1, y);
-    let n11 = gradP[X + 1 + perm[Y + 1]].dot2(x - 1, y - 1);
+    const n00 = gradP[X + perm[Y]].dot2(x, y);
+    const n01 = gradP[X + perm[Y + 1]].dot2(x, y - 1);
+    const n10 = gradP[X + 1 + perm[Y]].dot2(x - 1, y);
+    const n11 = gradP[X + 1 + perm[Y + 1]].dot2(x - 1, y - 1);
 
     // Compute the fade curve value for x
-    let u = fade(x);
+    const u = fade(x);
 
     // Interpolate the four results
     const result = lerp(lerp(n00, n10, u), lerp(n01, n11, u), fade(y));
