@@ -94,7 +94,7 @@ export const playerSlice = createSlice({
     },
     move: (state, action: PayloadAction<PlayerInput>) => {
       if (state.playerState !== PlayerState.Playing) {
-        if (action.payload === PlayerInput.Pause) {
+        if (action.payload === PlayerInput.Pause && state.playerState !== PlayerState.Pathfinding) {
           state.playerState = PlayerState.Playing;
         }
         return;
@@ -145,6 +145,7 @@ export const playerSlice = createSlice({
     },
     loadGame: (state, action: PayloadAction<SaveState | undefined>) => {
       state = { ...state, ...action.payload };
+      state.path = null;
       state.gameMap = generateMap(state.seed, gameMapWidth);
       state.playerState = PlayerState.Playing;
       return state;
