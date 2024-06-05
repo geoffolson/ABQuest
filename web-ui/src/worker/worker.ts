@@ -1,6 +1,7 @@
 import { FindSolution, Solution } from "../pathfinder/findSolution";
 import { PlayerInput } from "../redux/gameSlice";
 import { Tile } from "../generateMap/generateMap";
+import { WorkerMessage } from "./types";
 
 class ReduxFindSolution extends FindSolution {
   private onNextPath;
@@ -29,7 +30,7 @@ class ReduxFindSolution extends FindSolution {
   }
 }
 
-self.onmessage = (event) => {
+self.onmessage = (event: MessageEvent<WorkerMessage>) => {
   let solver: ReduxFindSolution | null = null;
   if (event.data.type === "init") {
     solver = new ReduxFindSolution(

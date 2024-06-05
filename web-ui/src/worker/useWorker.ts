@@ -8,6 +8,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/rootReducer";
 import { useEffect, useMemo, useRef } from "react";
+import { WorkerMessage } from "./types";
 
 export const createWorker = () => {
   return new Worker(new URL("./worker.ts", import.meta.url), { type: "module" });
@@ -51,7 +52,7 @@ export const usePathfinder = () => {
       };
       animationFrameHandleRef.current = window.requestAnimationFrame(requestPath);
 
-      workerRef.current.onmessage = (event) => {
+      workerRef.current.onmessage = (event: MessageEvent<WorkerMessage>) => {
         switch (event.data?.type) {
           case "current-path": {
             pathRef.current = event.data.path;
@@ -63,7 +64,7 @@ export const usePathfinder = () => {
           }
           case "solution": {
             window.cancelAnimationFrame(animationFrameHandleRef.current);
-            pathRef.current = event.data?.solution?.path;
+            pathRef.current = event.data.solution?.path ?? [];
             dispatch(pathfinding(false));
             dispatch(updatePath(pathRef.current));
             dispatch(updateSolution(pathRef.current));
