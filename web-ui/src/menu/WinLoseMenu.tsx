@@ -1,10 +1,10 @@
 import { Button } from "./Button";
 import { newGame } from "../redux/gameSlice";
-import { useDispatch } from "react-redux";
 import { Load } from "./Load";
+import { useAppDispatch } from "../redux/store";
 
 const WinLost = (props: { message: string }) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   return (
     <div className="flex gap-4 flex-col">
       {props.message}

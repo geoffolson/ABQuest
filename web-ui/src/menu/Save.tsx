@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { Button } from "./Button";
 import { saveGame, saveUser } from "../redux/gameSlice";
-import { useDispatch } from "react-redux";
-import { useAppSelector } from "../redux/store";
+import { useAppSelector, useAppDispatch } from "../redux/store";
 import { userAPI } from "../api";
 
 export const Save = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const username = useAppSelector((state) => state.game.username);
   const game = useAppSelector((state) => state.game);
   const cloudSave = async () => {

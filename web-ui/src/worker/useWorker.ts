@@ -5,8 +5,7 @@ import {
   updatePath,
   updateSolution,
 } from "../redux/gameSlice";
-import { useDispatch } from "react-redux";
-import { useAppSelector } from "../redux/store";
+import { useAppSelector, useAppDispatch } from "../redux/store";
 import { useEffect, useMemo, useRef } from "react";
 import { WorkerMessage } from "./types";
 
@@ -15,7 +14,7 @@ export const createWorker = () => {
 };
 
 export const usePathfinder = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const gameMap = useAppSelector((state) => state.game.gameMap);
 
   const pathRef = useRef<PlayerInput[] | null>(null);

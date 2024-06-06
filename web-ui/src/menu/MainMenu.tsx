@@ -1,12 +1,11 @@
 import { Button } from "./Button";
 import { newGame, registerScreen, loginScreen, logOut, pathfinding } from "../redux/gameSlice";
-import { useDispatch } from "react-redux";
-import { useAppSelector } from "../redux/store";
+import { useAppSelector, useAppDispatch } from "../redux/store";
 import { Save } from "./Save";
 import { Load } from "./Load";
 
 export const MainMenu = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const username = useAppSelector((state) => state.game.username);
   return (
     <div className="flex gap-4 flex-col">

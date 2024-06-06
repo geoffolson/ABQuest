@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "./redux/store";
 import { PlayerInput, move, saveUser } from "./redux/gameSlice";
 import { Stats } from "./Stats";
 import { Map } from "./Map";
@@ -8,7 +8,7 @@ import { useEffect } from "react";
 import { userAPI } from "./api";
 
 function App() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const onKeyDown = (e: KeyboardEvent) => {
     switch (e.code) {
       case "ArrowUp":

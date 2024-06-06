@@ -1,15 +1,15 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { Button } from "./Button";
-import { useDispatch } from "react-redux";
 import { cancelRegistration, saveToken, saveUser } from "../redux/gameSlice";
 import { APIError, userAPI } from "../api";
 import { Alert } from "../Alert";
+import { useAppDispatch } from "../redux/store";
 
 export const Register = (props: { login?: boolean }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { register, handleSubmit } = useForm<{ username: string; password: string }>();
 
   const onSubmit = async (data: { username: string; password: string }) => {

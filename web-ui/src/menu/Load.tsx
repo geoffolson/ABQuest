@@ -1,13 +1,12 @@
 import { hasLocalSavedGame } from "../utils";
 import { Button } from "./Button";
 import { loadGame } from "../redux/gameSlice";
-import { useDispatch } from "react-redux";
-import { useAppSelector } from "../redux/store";
+import { useAppSelector, useAppDispatch } from "../redux/store";
 import { userAPI } from "../api";
 import { useState } from "react";
 
 export const Load = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const savedGameId = useAppSelector((state) => state.game.savedGameId);
   const [loading, setIsLoading] = useState(false);
   // TODO Add error handling
