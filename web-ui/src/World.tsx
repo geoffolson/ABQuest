@@ -1,6 +1,5 @@
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";
-import { useSelector } from "react-redux";
-import { RootState } from "./redux/rootReducer";
+import { useAppSelector } from "./redux/store";
 import { Vector2 } from "./redux/gameSlice";
 import { Tile as TileType } from "./generateMap/generateMap";
 import { useRef } from "react";
@@ -37,7 +36,7 @@ const GameTile = ({ position, tile }: { position: Vector2; tile: TileType }) => 
 };
 
 const Character = ({ position, color }: { position: Vector2; color: string }) => {
-  const gameMap = useSelector((state: RootState) => state.game.gameMap);
+  const gameMap = useAppSelector((state) => state.game.gameMap);
   const z = tileDepthMap[gameMap[position.y][position.x]] + 0.7;
   const ref = useRef<Mesh>(null);
   useFrame((_state, delta) => {
@@ -52,9 +51,9 @@ const Character = ({ position, color }: { position: Vector2; color: string }) =>
 };
 
 const _World = () => {
-  const position = useSelector((state: RootState) => state.game.position);
-  const gameMap = useSelector((state: RootState) => state.game.gameMap);
-  const endPosition = useSelector((state: RootState) => state.game.endpoint);
+  const position = useAppSelector((state) => state.game.position);
+  const gameMap = useAppSelector((state) => state.game.gameMap);
+  const endPosition = useAppSelector((state) => state.game.endpoint);
   useFrame((state) => {
     state.camera.position.set(position.x, -(position.y + 3), 3);
   });

@@ -1,10 +1,9 @@
-import { useSelector } from "react-redux";
-import { RootState } from "./redux/rootReducer";
+import { useAppSelector } from "./redux/store";
 import { initialHealth, initialMoves } from "./redux/gameSlice";
 
 export const Stats = () => {
-  const health = useSelector((state: RootState) => state.game.health);
-  const moves = useSelector((state: RootState) => state.game.moves);
+  const health = useAppSelector((state) => state.game.health);
+  const moves = useAppSelector((state) => state.game.moves);
   return (
     <div className="bg-black p-2 w-[22rem] bg-opacity-40 rounded-md my-2 text-sm">
       <div className="flex flex-row items-center justify-between w-80">

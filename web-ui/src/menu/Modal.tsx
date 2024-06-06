@@ -1,15 +1,14 @@
 import { MenuScreen, PlayerState } from "../redux/gameSlice";
-import { RootState } from "../redux/rootReducer";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../redux/store";
 import { MainMenu } from "./MainMenu";
 import { Win, Lost } from "./WinLoseMenu";
 import { Register } from "./Register";
 import { Pathfinding } from "./Pathfinding";
 
 export const Modal = () => {
-  const playerState = useSelector((state: RootState) => state.game.playerState);
-  const menuScreen = useSelector((state: RootState) => state.game.menuScreen);
-  const username = useSelector((state: RootState) => state.game.username);
+  const playerState = useAppSelector((state) => state.game.playerState);
+  const menuScreen = useAppSelector((state) => state.game.menuScreen);
+  const username = useAppSelector((state) => state.game.username);
   const hideModal = playerState === PlayerState.Playing ? "hidden" : "";
   return (
     <div
@@ -17,7 +16,7 @@ export const Modal = () => {
     >
       <div className="relative top-40 mx-auto shadow-xl bg-gray-950 bg-opacity-70 max-w-md">
         <div className="flex justify-between items-center bg-gray-800 bg-opacity-50 text-white text-xl px-4 py-2">
-          <h3>Cenith Quest</h3>
+          <h3>A to B Quest</h3>
           <h3 hidden={!username}>{username}</h3>
         </div>
 

@@ -1,15 +1,16 @@
 import { hasLocalSavedGame } from "../utils";
 import { Button } from "./Button";
 import { loadGame } from "../redux/gameSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../redux/rootReducer";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "../redux/store";
 import { userAPI } from "../api";
 import { useState } from "react";
 
 export const Load = () => {
   const dispatch = useDispatch();
-  const savedGameId = useSelector((state: RootState) => state.game.savedGameId);
+  const savedGameId = useAppSelector((state) => state.game.savedGameId);
   const [loading, setIsLoading] = useState(false);
+  // TODO Add error handling
   const loadCloudGame = async () => {
     setIsLoading(true);
     const user = await userAPI.getProfile();

@@ -1,17 +1,16 @@
-import { useSelector } from "react-redux";
-import { RootState } from "./redux/rootReducer";
+import { useAppSelector } from "./redux/store";
 import { Tile } from "./Tile";
 import { eq, pathCoordinates } from "./utils";
 import { Vector2 } from "./redux/gameSlice";
 import { useMemo } from "react";
 
 export const Map = () => {
-  const gameMap = useSelector((state: RootState) => state.game.gameMap);
-  const position = useSelector((state: RootState) => state.game.position);
-  const endPosition = useSelector((state: RootState) => state.game.endpoint);
+  const gameMap = useAppSelector((state) => state.game.gameMap);
+  const position = useAppSelector((state) => state.game.position);
+  const endPosition = useAppSelector((state) => state.game.endpoint);
 
-  const path = useSelector((state: RootState) => state.game.path);
-  const solution = useSelector((state: RootState) => state.game.solution);
+  const path = useAppSelector((state) => state.game.path);
+  const solution = useAppSelector((state) => state.game.solution);
 
   const isPathTile = useMemo(() => {
     let coordinates: Vector2[] = [];

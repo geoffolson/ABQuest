@@ -5,8 +5,8 @@ import {
   updatePath,
   updateSolution,
 } from "../redux/gameSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../redux/rootReducer";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "../redux/store";
 import { useEffect, useMemo, useRef } from "react";
 import { WorkerMessage } from "./types";
 
@@ -16,23 +16,23 @@ export const createWorker = () => {
 
 export const usePathfinder = () => {
   const dispatch = useDispatch();
-  const gameMap = useSelector((state: RootState) => state.game.gameMap);
+  const gameMap = useAppSelector((state) => state.game.gameMap);
 
   const pathRef = useRef<PlayerInput[] | null>(null);
   const solutionRef = useRef<PlayerInput[] | null>(null);
   const workerRef = useRef<Worker | null>(null);
   const animationFrameHandleRef = useRef<number>(0);
 
-  const position = useSelector((state: RootState) => state.game.position);
-  const endpoint = useSelector((state: RootState) => state.game.endpoint);
-  const moves = useSelector((state: RootState) => state.game.moves);
-  const health = useSelector((state: RootState) => state.game.health);
+  const position = useAppSelector((state) => state.game.position);
+  const endpoint = useAppSelector((state) => state.game.endpoint);
+  const moves = useAppSelector((state) => state.game.moves);
+  const health = useAppSelector((state) => state.game.health);
   const character = useMemo(
     () => ({ position, endpoint, moves, health }),
     [position, endpoint, moves, health]
   );
 
-  const playerState = useSelector((state: RootState) => state.game.playerState);
+  const playerState = useAppSelector((state) => state.game.playerState);
 
   const terminate = () => {
     window.cancelAnimationFrame(animationFrameHandleRef.current);
