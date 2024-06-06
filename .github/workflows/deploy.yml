@@ -9,10 +9,22 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: geoffolson/ABQuest
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
         with:
           node-version: 20
-      - run: npm install
-      - run: npm run build
-      - run: npm run test --workspace=web-ui
-      - run: npm run lint --workspace=web-ui
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Run tests
+        run: npm run test --workspace=web-ui
+
+      - name: Lint code
+        run: npm run lint --workspace=web-ui
