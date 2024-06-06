@@ -3,14 +3,14 @@ import { useEffect, useRef, useState } from "react";
 const frames = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
 
 export const Loading = (props: { timeout?: number }) => {
-  const intervalRef = useRef(0);
+  const intervalRef = useRef<number>(0);
   const [currentFrame, setCurrentFrame] = useState(0);
   useEffect(() => {
     intervalRef.current = window.setInterval(
-      () => setCurrentFrame(currentFrame === frames.length - 1 ? 0 : currentFrame + 1),
+      () => setCurrentFrame((currFrame) => (currFrame === frames.length - 1 ? 0 : currFrame + 1)),
       props.timeout ?? 100
     );
     return () => clearInterval(intervalRef.current);
-  }, [intervalRef, currentFrame]);
+  }, [intervalRef, props.timeout]);
   return <>{frames[currentFrame]}</>;
 };

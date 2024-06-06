@@ -4,39 +4,42 @@ import { Stats } from "./Stats";
 import { Map } from "./Map";
 import { Modal } from "./menu/Modal";
 import { World } from "./World";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { userAPI } from "./api";
 
 function App() {
   const dispatch = useAppDispatch();
-  const onKeyDown = (e: KeyboardEvent) => {
-    switch (e.code) {
-      case "ArrowUp":
-      case "KeyW":
-        dispatch(move(PlayerInput.Up));
-        break;
-      case "ArrowDown":
-      case "KeyS":
-        dispatch(move(PlayerInput.Down));
-        break;
-      case "ArrowLeft":
-      case "KeyA":
-        dispatch(move(PlayerInput.Left));
-        break;
-      case "ArrowRight":
-      case "KeyD":
-        dispatch(move(PlayerInput.Right));
-        break;
-      case "Escape":
-      case "Space":
-        dispatch(move(PlayerInput.Pause));
-        break;
-    }
-  };
+  const onKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      switch (e.code) {
+        case "ArrowUp":
+        case "KeyW":
+          dispatch(move(PlayerInput.Up));
+          break;
+        case "ArrowDown":
+        case "KeyS":
+          dispatch(move(PlayerInput.Down));
+          break;
+        case "ArrowLeft":
+        case "KeyA":
+          dispatch(move(PlayerInput.Left));
+          break;
+        case "ArrowRight":
+        case "KeyD":
+          dispatch(move(PlayerInput.Right));
+          break;
+        case "Escape":
+        case "Space":
+          dispatch(move(PlayerInput.Pause));
+          break;
+      }
+    },
+    [dispatch]
+  );
   useEffect(() => {
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, []);
+  }, [onKeyDown]);
   return (
     <div
       ref={() => {
