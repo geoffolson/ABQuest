@@ -26,6 +26,9 @@ jobs:
       - name: Run tests
         run: npm run test --workspace=web-ui
 
+      - name: Check code formatting
+        run: npm run prettier
+
       - name: Lint code
         run: npm run lint --workspace=web-ui
 

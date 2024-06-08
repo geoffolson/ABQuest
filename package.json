@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npm run build --workspaces",
-    "lc": "npx cloc --include-lang=Typescript --exclude-dir=node_modules ."
+    "lc": "npx cloc --include-lang=Typescript --exclude-dir=node_modules .",
+    "check-formatting": "prettier . --check"
   },
   "author": "Geoffrey Olson Jr.",
   "license": "MIT",
@@ -14,5 +15,8 @@
     "common",
     "api",
     "web-ui"
-  ]
+  ],
+  "devDependencies": {
+    "prettier": "3.3.1"
+  }
 }
