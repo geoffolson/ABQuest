@@ -8,7 +8,10 @@ export const generateMap = (seed: number, width: number): Tile[][] => {
   const tiles = new Array(width * width)
     .fill(1)
     .map((_, idx) => {
-      const value = noise.perlin2((idx % width) / width, Math.floor(idx / width) / width);
+      const value = noise.perlin2(
+        (idx % width) / width,
+        Math.floor(idx / width) / width,
+      );
       if (value < min) min = value;
       if (value > max) max = value;
       return value;

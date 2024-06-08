@@ -35,12 +35,18 @@ export const Map = () => {
               const currentTile: Vector2 = { y, x };
               const isPath = isPathTile(currentTile);
               const isSolution = isSolutionTile(currentTile);
-              if (eq(currentTile, position)) return <Tile key={`${x}-${y}`} tile={tile} isPlayer />;
+              if (eq(currentTile, position))
+                return <Tile key={`${x}-${y}`} tile={tile} isPlayer />;
               else if (eq(currentTile, endPosition))
                 return <Tile key={`${x}-${y}`} tile={tile} isEndpoint />;
               else
                 return (
-                  <Tile key={`${x}-${y}`} tile={tile} isPath={isPath} isSolution={isSolution} />
+                  <Tile
+                    key={`${x}-${y}`}
+                    tile={tile}
+                    isPath={isPath}
+                    isSolution={isSolution}
+                  />
                 );
             })}
           </div>

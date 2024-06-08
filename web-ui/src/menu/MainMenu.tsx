@@ -1,5 +1,11 @@
 import { Button } from "./Button";
-import { newGame, registerScreen, loginScreen, logOut, pathfinding } from "../redux/gameSlice";
+import {
+  newGame,
+  registerScreen,
+  loginScreen,
+  logOut,
+  pathfinding,
+} from "../redux/gameSlice";
 import { useAppSelector, useAppDispatch } from "../redux/store";
 import { Save } from "./Save";
 import { Load } from "./Load";

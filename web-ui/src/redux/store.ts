@@ -6,7 +6,8 @@ import { RootState } from "./rootReducer";
 
 export const store = configureStore({
   reducer: rootReducer,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(saveMiddleware),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(saveMiddleware),
 });
 
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}

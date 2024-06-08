@@ -10,7 +10,7 @@ class ReduxFindSolution extends FindSolution {
   constructor(
     gameMap: Tile[][],
     onNextPath: (path: PlayerInput[], currentSolution: Solution | null) => void,
-    onSetSolution: (solution: Solution) => void
+    onSetSolution: (solution: Solution) => void,
   ) {
     super(gameMap);
     this.onNextPath = onNextPath;
@@ -41,7 +41,7 @@ self.onmessage = (event: MessageEvent<WorkerMessage>) => {
       (solution) => {
         self.postMessage({ type: "current-path", path: solution.path });
         self.postMessage({ type: "current-solution", path: solution.path });
-      }
+      },
     );
     self.postMessage({ type: "current-path", path: [] });
     const solution = solver.findSolution(event.data.character);

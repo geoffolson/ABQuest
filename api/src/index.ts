@@ -29,7 +29,7 @@ passport.use(
     } catch (error) {
       return done(error);
     }
-  })
+  }),
 );
 
 // JWT Strategy
@@ -52,81 +52,100 @@ passport.use(
     } catch (error) {
       return done(error, false);
     }
-  })
+  }),
 );
 
 app.post("/login", (req, res, next) => {
-  passport.authenticate("local", { session: false }, (err: any, user: any, info: any) => {
-    if (err) {
-      return next(err);
-    }
-    if (!user) {
-      return res.status(401).json({ message: info.message });
-    }
-    const token = jwt.sign({ username: user.username }, jwtOptions.secretOrKey);
-    return res.json({ token });
-  })(req, res, next);
-});
-
-app.get("/profile", passport.authenticate("jwt", { session: false }), (req, res) => {
-  res.json({
-    username: req.user?.username,
-    savedGameId: req.user?.savedGameId,
-  });
-});
-
-app.get("/save", passport.authenticate("jwt", { session: false }), async (req, res) => {
-  const id = z.number().parse(req.user?.savedGameId);
-  const savedGame = await prisma.savedGame.findFirst({ where: { id } });
-  res.json({
-    position: {
-      x: savedGame?.positionX,
-      y: savedGame?.positionY,
+  passport.authenticate(
+    "local",
+    { session: false },
+    (err: any, user: any, info: any) => {
+      if (err) {
+        return next(err);
+      }
+      if (!user) {
+        return res.status(401).json({ message: info.message });
+      }
+      const token = jwt.sign(
+        { username: user.username },
+        jwtOptions.secretOrKey,
+      );
+      return res.json({ token });
     },
-    endpoint: {
-      x: savedGame?.endPositionX,
-      y: savedGame?.endPositionY,
-    },
-    seed: savedGame?.seed,
-    moves: savedGame?.moves,
-    health: savedGame?.health,
-  });
+  )(req, res, next);
 });
 
-app.post("/save", passport.authenticate("jwt", { session: false }), async (req, res) => {
-  const body = SavedState.parse(req.body);
-  const data = {
-    positionX: body.position.x,
-    positionY: body.position.y,
-    endPositionX: body.endpoint.x,
-    endPositionY: body.endpoint.y,
-    health: body.health,
-    moves: body.moves,
-    seed: body.seed,
-  };
-  const userId = z.number().parse(req?.user?.id);
-  try {
-    const savedGameId = z.number().optional().parse(req?.user?.savedGameId);
-    await prisma.savedGame.update({
-      data,
-      where: {
-        id: savedGameId,
-      },
+app.get(
+  "/profile",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    res.json({
+      username: req.user?.username,
+      savedGameId: req.user?.savedGameId,
     });
-  } catch (e) {
-    const { id } = await prisma.savedGame.create({ data });
-    await prisma.user.update({
-      data: {
-        savedGameId: id,
+  },
+);
+
+app.get(
+  "/save",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const id = z.number().parse(req.user?.savedGameId);
+    const savedGame = await prisma.savedGame.findFirst({ where: { id } });
+    res.json({
+      position: {
+        x: savedGame?.positionX,
+        y: savedGame?.positionY,
       },
-      where: {
-        id: userId,
+      endpoint: {
+        x: savedGame?.endPositionX,
+        y: savedGame?.endPositionY,
       },
+      seed: savedGame?.seed,
+      moves: savedGame?.moves,
+      health: savedGame?.health,
     });
-    if (req.user) req.user.savedGameId = id;
-  }
-  res.json(req.user);
-});
+  },
+);
+
+app.post(
+  "/save",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const body = SavedState.parse(req.body);
+    const data = {
+      positionX: body.position.x,
+      positionY: body.position.y,
+      endPositionX: body.endpoint.x,
+      endPositionY: body.endpoint.y,
+      health: body.health,
+      moves: body.moves,
+      seed: body.seed,
+    };
+    const userId = z.number().parse(req?.user?.id);
+    try {
+      const savedGameId = z.number().optional().parse(req?.user?.savedGameId);
+      await prisma.savedGame.update({
+        data,
+        where: {
+          id: savedGameId,
+        },
+      });
+    } catch (e) {
+      const { id } = await prisma.savedGame.create({ data });
+      await prisma.user.update({
+        data: {
+          savedGameId: id,
+        },
+        where: {
+          id: userId,
+        },
+      });
+      if (req.user) req.user.savedGameId = id;
+    }
+    res.json(req.user);
+  },
+);
 
 app.post("/register", async (req, res) => {
   try {
@@ -150,7 +169,9 @@ app.post("/register", async (req, res) => {
       },
     });
 
-    res.status(201).json({ message: "User created successfully", user: newUser });
+    res
+      .status(201)
+      .json({ message: "User created successfully", user: newUser });
   } catch (error) {
     console.error("Error creating user:", error);
     res.status(500).json({ message: "Internal server error" });

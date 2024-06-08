@@ -16,7 +16,13 @@ const tileDepthMap: Record<TileType, number> = {
   L: 0,
 };
 
-const GameTile = ({ position, tile }: { position: Vector2; tile: TileType }) => {
+const GameTile = ({
+  position,
+  tile,
+}: {
+  position: Vector2;
+  tile: TileType;
+}) => {
   const lava = useLoader(TextureLoader, lavaImgURL);
   const sand = useLoader(TextureLoader, sandImgURL);
   const mud = useLoader(TextureLoader, mudImgURL);
@@ -35,7 +41,13 @@ const GameTile = ({ position, tile }: { position: Vector2; tile: TileType }) => 
   );
 };
 
-const Character = ({ position, color }: { position: Vector2; color: string }) => {
+const Character = ({
+  position,
+  color,
+}: {
+  position: Vector2;
+  color: string;
+}) => {
   const gameMap = useAppSelector((state) => state.game.gameMap);
   const z = tileDepthMap[gameMap[position.y][position.x]] + 0.7;
   const ref = useRef<Mesh>(null);
@@ -65,8 +77,10 @@ const _World = () => {
       <Character position={endPosition} color="green" />
       {gameMap.map((row, y) =>
         row.map((tile, x) => {
-          return <GameTile key={`${x}-${y}`} position={{ x, y: -y }} tile={tile} />;
-        })
+          return (
+            <GameTile key={`${x}-${y}`} position={{ x, y: -y }} tile={tile} />
+          );
+        }),
       )}
     </>
   );

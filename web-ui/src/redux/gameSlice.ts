@@ -76,12 +76,13 @@ const initialState: GameState = {
   menuScreen: MenuScreen.Main,
 };
 
-export const tileEffectMap: Record<string, { health: number; moves: number }> = {
-  B: { health: 0, moves: -1 },
-  S: { health: -5, moves: 0 },
-  L: { health: -10, moves: -10 },
-  M: { health: -10, moves: -5 },
-};
+export const tileEffectMap: Record<string, { health: number; moves: number }> =
+  {
+    B: { health: 0, moves: -1 },
+    S: { health: -5, moves: 0 },
+    L: { health: -10, moves: -10 },
+    M: { health: -10, moves: -5 },
+  };
 
 export const playerSlice = createSlice({
   name: "player",
@@ -99,7 +100,10 @@ export const playerSlice = createSlice({
     },
     move: (state, action: PayloadAction<PlayerInput>) => {
       if (state.playerState !== PlayerState.Playing) {
-        if (action.payload === PlayerInput.Pause && state.playerState !== PlayerState.Pathfinding) {
+        if (
+          action.payload === PlayerInput.Pause &&
+          state.playerState !== PlayerState.Pathfinding
+        ) {
           state.playerState = PlayerState.Playing;
         }
         return;
@@ -137,13 +141,20 @@ export const playerSlice = createSlice({
       const { health, moves } = tileEffectMap[state.gameMap[y][x]];
       state.moves += moves;
       state.health += health;
-      if (eq(state.position, state.endpoint)) state.playerState = PlayerState.Won;
-      else if (state.moves <= 0 || state.health <= 0) state.playerState = PlayerState.Lost;
+      if (eq(state.position, state.endpoint))
+        state.playerState = PlayerState.Won;
+      else if (state.moves <= 0 || state.health <= 0)
+        state.playerState = PlayerState.Lost;
     },
     newGame: (state) => {
       const username = state.username;
       const savedGameId = state.savedGameId;
-      state = { ...initialState, username, savedGameId, endpoint: generateEndpoint() };
+      state = {
+        ...initialState,
+        username,
+        savedGameId,
+        endpoint: generateEndpoint(),
+      };
       state.seed = generateSeed();
       state.gameMap = generateMap(state.seed, gameMapWidth);
       state.playerState = PlayerState.Playing;
@@ -177,7 +188,10 @@ export const playerSlice = createSlice({
     saveToken: (state, _action: PayloadAction<string>) => {
       state.menuScreen = MenuScreen.Main;
     },
-    saveUser: (state, action: PayloadAction<{ username: string; savedGameId: number | null }>) => {
+    saveUser: (
+      state,
+      action: PayloadAction<{ username: string; savedGameId: number | null }>,
+    ) => {
       state.username = action.payload.username;
       state.savedGameId = action.payload.savedGameId;
     },

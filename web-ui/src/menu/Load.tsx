@@ -21,10 +21,17 @@ export const Load = () => {
   };
   return (
     <div className="flex gap-4 flex-row">
-      <Button disabled={!hasLocalSavedGame()} onClick={() => dispatch(loadGame())}>
+      <Button
+        disabled={!hasLocalSavedGame()}
+        onClick={() => dispatch(loadGame())}
+      >
         Load Local Game
       </Button>
-      <Button isLoading={loading} disabled={savedGameId === null} onClick={loadCloudGame}>
+      <Button
+        isLoading={loading}
+        disabled={savedGameId === null}
+        onClick={loadCloudGame}
+      >
         Load Cloud Game
       </Button>
     </div>

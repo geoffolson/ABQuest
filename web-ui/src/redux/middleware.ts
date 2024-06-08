@@ -23,7 +23,7 @@ export const saveMiddleware: Middleware<Record<string, unknown>, RootState> =
       // don't load from localStorage if saved data is provided in payload
       if (!action?.payload) {
         action.payload = SavedState.parse(
-          JSON.parse(window.localStorage.getItem(saveGameKey) ?? "null")
+          JSON.parse(window.localStorage.getItem(saveGameKey) ?? "null"),
         );
       }
     }

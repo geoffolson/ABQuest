@@ -31,4 +31,8 @@ type FinalSolution = {
   solution: Solution | null;
 };
 
-export type WorkerMessage = CurrentPath | CurrentSolution | Init | FinalSolution;
+export type WorkerMessage =
+  | CurrentPath
+  | CurrentSolution
+  | Init
+  | FinalSolution;

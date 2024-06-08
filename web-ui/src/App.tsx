@@ -34,7 +34,7 @@ function App() {
           break;
       }
     },
-    [dispatch]
+    [dispatch],
   );
   useEffect(() => {
     window.addEventListener("keydown", onKeyDown);

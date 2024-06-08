@@ -63,13 +63,21 @@ Function findSolution will perform a depth first search for the optimal path. Wh
 In the implementation of \_findSolution the for loop making the recursive calls was traversing left first on the map, then up, right, then down. In the updated implementation findSolution traverses to the direction that reduces the manhattan distance to the endpoint first. This small optimization lead to a 10x performance boost in some of the auto-generated maps
 
 ```typescript
-const nextPositions = [PlayerInput.Left, PlayerInput.Up, PlayerInput.Right, PlayerInput.Down]
+const nextPositions = [
+  PlayerInput.Left,
+  PlayerInput.Up,
+  PlayerInput.Right,
+  PlayerInput.Down,
+]
   .map((direction) => [direction, this.gameMap.move(character, direction)])
-  .filter((nextPosition) => !!nextPosition[1]) as [PlayerInput, CharacterState][];
+  .filter((nextPosition) => !!nextPosition[1]) as [
+  PlayerInput,
+  CharacterState,
+][];
 nextPositions.sort(
   (a, b) =>
     manhattanDistance(a[1].position, character.endpoint) -
-    manhattanDistance(b[1].position, character.endpoint)
+    manhattanDistance(b[1].position, character.endpoint),
 );
 
 for (const [direction, nextPosition] of nextPositions) {
@@ -95,7 +103,8 @@ if (
 const visits = this.visitedTiles.getVisited(character.position) ?? [];
 for (const visit of visits) {
   // stop traversing if a previous path arrived here with objectively better stats
-  if (visit.health >= character.health && visit.moves >= character.moves) return false;
+  if (visit.health >= character.health && visit.moves >= character.moves)
+    return false;
 }
 ```
 

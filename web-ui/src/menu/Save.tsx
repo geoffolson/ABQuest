@@ -26,7 +26,11 @@ export const Save = () => {
   return (
     <div className="flex gap-4 flex-row">
       <Button onClick={() => dispatch(saveGame())}>Local Save</Button>
-      <Button isLoading={isLoading} disabled={!username} onClick={() => cloudSave()}>
+      <Button
+        isLoading={isLoading}
+        disabled={!username}
+        onClick={() => cloudSave()}
+      >
         Cloud Save
       </Button>
     </div>

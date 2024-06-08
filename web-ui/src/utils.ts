@@ -8,7 +8,10 @@ export const manhattanDistance = (A: Vector2, B: Vector2) =>
   Math.abs(A.x - B.x) + Math.abs(A.y - B.y);
 
 // function assumes path is valid and no bounds checking is done.
-export const pathCoordinates = (path: PlayerInput[], position: Vector2): Vector2[] => {
+export const pathCoordinates = (
+  path: PlayerInput[],
+  position: Vector2,
+): Vector2[] => {
   const character = structuredClone(position);
   const coordinates: Vector2[] = [];
   path.forEach((direction) => {
@@ -35,4 +38,5 @@ export const pathCoordinates = (path: PlayerInput[], position: Vector2): Vector2
   return coordinates;
 };
 
-export const hasLocalSavedGame = () => !!window.localStorage.getItem(saveGameKey);
+export const hasLocalSavedGame = () =>
+  !!window.localStorage.getItem(saveGameKey);

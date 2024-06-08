@@ -10,7 +10,10 @@ export const Register = (props: { login?: boolean }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const dispatch = useAppDispatch();
-  const { register, handleSubmit } = useForm<{ username: string; password: string }>();
+  const { register, handleSubmit } = useForm<{
+    username: string;
+    password: string;
+  }>();
 
   const onSubmit = async (data: { username: string; password: string }) => {
     setIsLoading(true);
@@ -62,7 +65,11 @@ export const Register = (props: { login?: boolean }) => {
           />
         </label>
         <div className="flex gap-4">
-          <Button variant="secondary" type="button" onClick={() => dispatch(cancelRegistration())}>
+          <Button
+            variant="secondary"
+            type="button"
+            onClick={() => dispatch(cancelRegistration())}
+          >
             Back
           </Button>
           <Button disabled={isLoading}>Submit</Button>

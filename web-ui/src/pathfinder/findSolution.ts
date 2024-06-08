@@ -1,5 +1,10 @@
 import { Tile } from "../generateMap/generateMap";
-import { CharacterState, PlayerInput, Vector2, tileEffectMap } from "../redux/gameSlice";
+import {
+  CharacterState,
+  PlayerInput,
+  Vector2,
+  tileEffectMap,
+} from "../redux/gameSlice";
 import { eq, manhattanDistance } from "../utils";
 
 type Heuristic = { health: number; moves: number };
@@ -16,14 +21,18 @@ class VisitedTiles {
 
   setVisited(character: CharacterState) {
     const visited = this.getVisited(character.position);
-    if (visited) visited.push({ health: character.health, moves: character.moves });
+    if (visited)
+      visited.push({ health: character.health, moves: character.moves });
     else
-      this.visitedTilesMap.set(`${character.position.x}-${character.position.y}`, [
-        {
-          health: character.health,
-          moves: character.moves,
-        },
-      ]);
+      this.visitedTilesMap.set(
+        `${character.position.x}-${character.position.y}`,
+        [
+          {
+            health: character.health,
+            moves: character.moves,
+          },
+        ],
+      );
   }
 }
 
@@ -34,7 +43,10 @@ class GameMap {
     this.map = map;
     this.width = this.map.length;
   }
-  move(character: CharacterState, direction: PlayerInput): CharacterState | null {
+  move(
+    character: CharacterState,
+    direction: PlayerInput,
+  ): CharacterState | null {
     // performing deep copy of character object
     // using this method of deep cloning in case reviewer is using a version of node older than 17.0.0
     // Otherwise would use structuredClone
@@ -74,7 +86,12 @@ export type Solution = {
   path: PlayerInput[];
 };
 
-const directions = [PlayerInput.Left, PlayerInput.Up, PlayerInput.Right, PlayerInput.Down];
+const directions = [
+  PlayerInput.Left,
+  PlayerInput.Up,
+  PlayerInput.Right,
+  PlayerInput.Down,
+];
 
 export class FindSolution {
   private readonly gameMap;
@@ -101,7 +118,8 @@ export class FindSolution {
     const visits = this.visitedTiles.getVisited(character.position) ?? [];
     for (const visit of visits) {
       // stop traversing if a previous path arrived here with objectively better stats
-      if (visit.health >= character.health && visit.moves >= character.moves) return false;
+      if (visit.health >= character.health && visit.moves >= character.moves)
+        return false;
     }
     this.visitedTiles.setVisited(character);
     return true;
@@ -109,7 +127,8 @@ export class FindSolution {
 
   private solutionIsLessThan(character: CharacterState) {
     const currentScore =
-      (this?.solution?.character?.health ?? 0) + (this?.solution?.character?.moves ?? 0);
+      (this?.solution?.character?.health ?? 0) +
+      (this?.solution?.character?.moves ?? 0);
     return currentScore < character.health + character.moves;
   }
 
@@ -136,11 +155,14 @@ export class FindSolution {
 
     const nextPositions = directions
       .map((direction) => [direction, this.gameMap.move(character, direction)])
-      .filter((nextPosition) => !!nextPosition[1]) as [PlayerInput, CharacterState][];
+      .filter((nextPosition) => !!nextPosition[1]) as [
+      PlayerInput,
+      CharacterState,
+    ][];
     nextPositions.sort(
       (a, b) =>
         manhattanDistance(a[1].position, character.endpoint) -
-        manhattanDistance(b[1].position, character.endpoint)
+        manhattanDistance(b[1].position, character.endpoint),
     );
 
     for (const [direction, nextPosition] of nextPositions) {

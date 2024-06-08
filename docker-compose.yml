@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   nginx:
@@ -18,4 +18,3 @@ services:
       - "3000:3000"
     volumes:
       - ./api/dev.db:/usr/src/app/api/dev.db
-

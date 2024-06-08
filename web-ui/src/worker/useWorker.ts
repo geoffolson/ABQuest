@@ -10,7 +10,9 @@ import { useEffect, useMemo, useRef } from "react";
 import { WorkerMessage } from "./types";
 
 export const createWorker = () => {
-  return new Worker(new URL("./worker.ts", import.meta.url), { type: "module" });
+  return new Worker(new URL("./worker.ts", import.meta.url), {
+    type: "module",
+  });
 };
 
 export const usePathfinder = () => {
@@ -28,7 +30,7 @@ export const usePathfinder = () => {
   const health = useAppSelector((state) => state.game.health);
   const character = useMemo(
     () => ({ position, endpoint, moves, health }),
-    [position, endpoint, moves, health]
+    [position, endpoint, moves, health],
   );
 
   const playerState = useAppSelector((state) => state.game.playerState);
@@ -39,7 +41,11 @@ export const usePathfinder = () => {
   };
 
   useEffect(() => {
-    if (playerState === PlayerState.Pathfinding && !workerRef.current && gameMap) {
+    if (
+      playerState === PlayerState.Pathfinding &&
+      !workerRef.current &&
+      gameMap
+    ) {
       workerRef.current = createWorker();
       workerRef.current.postMessage({ type: "init", gameMap, character });
 
@@ -47,9 +53,11 @@ export const usePathfinder = () => {
       const requestPath = () => {
         dispatch(updatePath(pathRef.current));
         dispatch(updateSolution(solutionRef.current));
-        animationFrameHandleRef.current = window.requestAnimationFrame(requestPath);
+        animationFrameHandleRef.current =
+          window.requestAnimationFrame(requestPath);
       };
-      animationFrameHandleRef.current = window.requestAnimationFrame(requestPath);
+      animationFrameHandleRef.current =
+        window.requestAnimationFrame(requestPath);
 
       workerRef.current.onmessage = (event: MessageEvent<WorkerMessage>) => {
         switch (event.data?.type) {
@@ -67,7 +75,8 @@ export const usePathfinder = () => {
             dispatch(pathfinding(false));
             dispatch(updatePath(pathRef.current));
             dispatch(updateSolution(pathRef.current));
-            if (pathRef.current) console.log("Optimal Solution Found", event.data.solution);
+            if (pathRef.current)
+              console.log("Optimal Solution Found", event.data.solution);
             else console.log("No solution");
             break;
           }
