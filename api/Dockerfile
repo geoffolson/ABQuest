@@ -14,6 +14,9 @@ RUN npm run build --workspaces
 # Second stage: Copy built files to final image
 FROM node:20
 
+ARG DATABASE_URL=DATABASE_URL
+ENV DATABASE_URL=$DATABASE_URL
+
 # Set the working directory in the container
 WORKDIR /usr/src/app
 

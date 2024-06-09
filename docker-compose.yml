@@ -1,5 +1,4 @@
-version: "3.8"
-
+#geoff@geoff-ThinkPad-S3-Yoga-14:~/ABQuest$ psql -h localhost -p 5432 -U myuser -d mydatabase
 services:
   nginx:
     build:
@@ -10,11 +9,39 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
 
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
   api:
     build:
       context: .
       dockerfile: api/Dockerfile
+      args:
+        POSTGRES_DB: mydatabase
+        POSTGRES_USER: myuser
+        POSTGRES_PASSWORD: mypassword
+        POSTGRES_HOST: postgres
+        DATABASE_URL: postgres://myuser:mypassword@postgres:5432/mydatabase
     ports:
       - "3000:3000"
     volumes:
       - ./api/dev.db:/usr/src/app/api/dev.db
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_HOST: postgres
+      DATABASE_URL: postgres://myuser:mypassword@postgres:5432/mydatabase
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
