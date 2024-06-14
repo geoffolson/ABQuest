@@ -2,7 +2,7 @@ import { SavedState } from "common";
 import { SaveState } from "./redux/gameSlice";
 import { tokenKey } from "./redux/middleware";
 
-const baseURL = "/api";
+const baseURL = import.meta.env.VITE_BASE_URL;
 
 export type APIError = {
   message: string;
