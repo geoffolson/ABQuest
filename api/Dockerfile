@@ -31,7 +31,7 @@ RUN npm install --production
 
 # Generate and migrate Prisma schema
 RUN npx prisma generate
-RUN npx prisma migrate dev --name init
+# RUN npx prisma migrate dev --name init
 
 # Expose port 3000 (or whatever port your Express app listens on)
 EXPOSE 3000
